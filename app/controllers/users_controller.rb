@@ -43,6 +43,7 @@ class UsersController < ApplicationController
     end
   end
   
+  
   def destroy
     @user.destroy
     flash[:success] = "#{@user.name}のデータを削除しました。"
