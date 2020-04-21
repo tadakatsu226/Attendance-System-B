@@ -66,18 +66,19 @@
           </td>    
 
           <td><%= l(day.started_at, format: :time_hour) if day.started_at.present? %></td>
-          <td><%= l(day.started_at, format: :time_minute) if day.started_at.present? %></td>
+          <td><%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %></td>
           <td style="width: 20%">
           　<% if btn_text = attendance_state(day) %>
           　<%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
    　　　  　　 <% end %>
           </td>
           <td style="width: 10%"><%= l(day.finished_at, format: :time_hour) if day.finished_at.present? %></td>
-          <td style="width: 10%"><%= l(day.finished_at, format: :time_minute) if day.finished_at.present? %></td>
+          <td style="width: 10%"><%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %></td>
           <td style="width: 10%">
             <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at, day.finished_at) %>
+              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+              <%# @total_working_times = @total_working_times.round_to(15.minutes) + str_times.round_to(15.minutes) %>
             <% end %>
           </td>
           <td style="width: 15%"><%= day.note %></td>
