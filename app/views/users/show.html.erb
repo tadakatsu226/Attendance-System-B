@@ -29,7 +29,12 @@
     </tr>
   </table>
 </div>
-
+    <ul class="infomation">
+      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %></li>
+      <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %></li>
+      <li><%=link_to "【残業申請のお知らせ】", "#" , class: "apprication-info" %></li>
+    </ul>
+    
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
   <%= link_to "CSV 出力", "#" , class: "btn btn-primary" %><br>
@@ -99,7 +104,6 @@
             <% if day.started_at.present? && day.finished_at.present? %>
               <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-              <%# @total_working_times = @total_working_times.round_to(15.minutes) + str_times.round_to(15.minutes) %>
             <% end %>
           </td>
           <td><%= day.note %></td>
@@ -111,38 +115,31 @@
         </tr>
       <% end %>
     </tbody>
+    
     <tfoot>
-  <tr>
-    <!--<td colspan="2">累計日数</td>-->
-  <!--  <td colspan="2">総合勤務時間</td>-->
-  <!--  <td colspan="2">累計在社時間</td>-->
-  <!--  <td rowspan="2"></td>-->
-  </tr>
-  <tr>
-    <td></td>
-    <td colspan="2"></td>
-    <td colspan="5"></td>
-    <td><%= format("%.2f", @total_working_times.to_f) %></td>
-    <td colspan="5"></td>
-    
-    
-    
-    <td>
-     所属長承認　未
-      <div class="dropdown">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">上長A　　　　<span class="caret"></span>
-        </button>
-        
-          
-          <ul class="dropdown-menu">
-            <li><%= link_to "上長A", current_user %></li>
-          </ul>
-      </div>
-    </td>
-    
-    
-    
-  </tr>
-</tfoot>
+        <tr>
+          <td></td>
+          <td colspan="2"></td>
+          <td colspan="5"></td>
+          <td><%= format("%.2f", @total_working_times.to_f) %></td>
+          <td colspan="5"></td>
+          <td>
+           所属長承認　未
+            <div class="dropdown">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">上長A　　　　
+              <span class="caret"></span>
+              </button>
+                <div class="dropdown-menu">
+                  <li class= "dropdown-item"><%= link_to "上長A", current_user %></li>
+                </div>
+            </div>
+            <div class="Approval">
+            <%= link_to "承認", "#", class: "btn btn-block btn-primary" %>
+            </div>
+          </td>
+        </tr>
+    </tfoot>
   </table>
 </div>
+
+
