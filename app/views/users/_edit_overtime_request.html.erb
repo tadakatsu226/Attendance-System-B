@@ -1,5 +1,5 @@
 <% provide(:class_text, 'overtime-request') %>
-<% provide(:button_text, '変更を更新する') %>
+<% provide(:button_text, '変更を送信する') %>
 
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
@@ -10,9 +10,9 @@
       <h1 class="modal-title">【残業申請】</h1>
     </div>
     <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <%= form_with(model: @attendance, url: update_overtime_request_user_path(@user), local: true, method: :patch) do |f| %>
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <%= form_with(model: @user, url: update_overtime_request_user_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
             
             
@@ -21,27 +21,29 @@
                   <tr>
                     <th>日付</th>
                     <th>曜日</th>
-                    <th>　終了予定時間　</th>
+                    <th>終了予定時間</th>
                     <th>翌日</th>
-                    <th>　　　業務処理内容　　　</th>
+                    <th>業務処理内容</th>
                     <th>指示者確認㊞</th>
                   </tr>
+                </thead>  
+                <tbody>
                   <tr>
                     <td><%= l(@day, format: :short) %></td>
                     <td><%= $days_of_the_week[@day.wday] %></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><%= time_field :finished_at, class: "form-control" %></td>
+                    <td><%= f.check_box :tomorow,{class: 'chk'} %></td>
+                    <td><%= f.text_field :work_contents, :size=>"35" %></td>
+                    <td><%= f.select :mark_of_instructor, [["選択してください"],["上長1"],["上長2"]]%></td>
                   </tr>
-                </thead>
+                </tbody>
               </table>    
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
             </div>
           <% end %>
-        </div>  
-      </div>
+        <!--</div>  -->
+      <!--</div>-->
     </div>
   </div>
 </div>

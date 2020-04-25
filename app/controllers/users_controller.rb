@@ -64,12 +64,7 @@ class UsersController < ApplicationController
   
   
   def edit_overtime_request
-
-    # @attendance = Attendance.all
-  
     @day = Date.parse(params[:day])
-  
-  
   end
   
   
