@@ -8,7 +8,8 @@ class UsersController < ApplicationController
 
 
   def index
-    @users = User.paginate(page: params[:page]).search(params[:search])
+    # @users = User.paginate(page: params[:page]).search(params[:search])
+    @users = User.where.not(id: 1).all
   end
 
   def show

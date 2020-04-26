@@ -27,25 +27,59 @@
 
 <!--<div class="col-md-10 col-md-offset-1">-->
   <%#= will_paginate %>
-  <!--<table class="table table-condensed table-hover" id="table-users">-->
+  <table class="table" id="table-users">
+   <tbody>
     <% @users.each do |user| %>
       <tr>
         <td>
           <%# if current_user.admin? %>
             <%#= link_to user.name, user %>   
           <%# else %>
-            <%= user.name %>
+            <%= user.name %><br>|
           <%# end %>
-            <%= link_to "編集", edit_basic_info_user_path(user), class: "btn btn-lg btn-primary" %> 
-          <% if current_user.admin? %>
-          <% end %>
-          <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "削除", user, class: "btn btn-lg btn-primary", method: :delete,
+
+          <%# if current_user.admin? && !current_user?(user) %>
+            <%= link_to "削除", user, class: "btn btn-md btn-primary", method: :delete,
                 data: { confirm: "削除してよろしいですか？" } %>
-          <% end %>
+          
         </td>
       </tr>
+      <tr>
+        <td class="active">
+          <a class="btn btn-lg btn-primary" data-toggle="collapse" href="#collapseExample<%= user.id %>" role="button" aria-expanded="false" aria-controls="collapseExample">編集</a>
+          
+          <div class="collapse" id="collapseExample<%= user.id %>">
+             <div class="card card-body">
+                コンテンツが表示されます。
+                
+                
+                
+                
+             </div>
+          </div> 
+        </td>
+      </tr>
+        
+      
     <% end %>
-  <!--</table>-->
+    </tbody>
+    
+    
+  </table>
   <%#= will_paginate %>
+<!--</div>-->
+
+
+<%#= render "user",{user: user} %>
+ <%#= link_to "編集", "#collapseExample" , class: "btn btn-lg btn-primary" %> 
+
+<!--<p>-->
+<!--  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+<!--    リンク式-->
+<!--  </a>-->
+<!--</p>-->
+<!--<div class="collapse" id="collapseExample">-->
+<!--  <div class="card card-body">-->
+<!--    コンテンツが表示されます。-->
+<!--  </div>-->
 <!--</div>-->
