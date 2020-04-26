@@ -50,8 +50,7 @@
           
           <div class="collapse" id="collapseExample<%= user.id %>">
              <div class="card card-body">
-                コンテンツが表示されます。
-                
+                <%= render partial: 'user', locals: {user: user} %>
                 
                 
                 
@@ -70,7 +69,7 @@
 <!--</div>-->
 
 
-<%#= render "user",{user: user} %>
+
  <%#= link_to "編集", "#collapseExample" , class: "btn btn-lg btn-primary" %> 
 
 <!--<p>-->
