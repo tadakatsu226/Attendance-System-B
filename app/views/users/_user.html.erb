@@ -1,5 +1,5 @@
- <%= form_with(model:user, local: true) do |f| %>
-         <%= render 'shared/error_messages' %> 
+ <%= form_with(model: user, local: true) do |f| %>
+         <%#= render 'shared/error_messages', object: @user %> 
 
         
          <%= f.label :name, class: "label-#{yield(:class_text)}" %>
@@ -20,14 +20,14 @@
          <%= f.label :password, class: "label-#{yield(:class_text)}" %>
          <%= f.password_field :password,  class: "form-control" %>
          
-         <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
-         <%= f.time_field :basic_work_time, class: "form-control" %>
+         <%= f.label :basic_time, class: "label-#{yield(:class_text)}" %>
+         <%= f.time_field :basic_time, class: "form-control" %>
 
-         <%= f.label :Designation_duty_start_time, class: "label-#{yield(:class_text)}" %>
-         <%= f.time_field :Designation_duty_start_time, class: "form-control" %>
+         <%= f.label :designation_duty_start_time, class: "label-#{yield(:class_text)}" %>
+         <%= f.time_field :designation_duty_start_time, class: "form-control" %>
          
-         <%= f.label :Designation_duty_finish_time, class: "label-#{yield(:class_text)}" %>
-         <%= f.time_field :Designation_duty_finish_time, class: "form-control" %>
+         <%= f.label :designation_duty_finish_time, class: "label-#{yield(:class_text)}" %>
+         <%= f.time_field :designation_duty_finish_time, class: "form-control" %>
          
          <%= f.submit "編集する", class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
       <% end %>

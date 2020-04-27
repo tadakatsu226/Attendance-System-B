@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request, :update_overtime_request]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request, :update_overtime_request]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :correct_user, only: [:edit, :update,]
+  before_action :admin_or_correct_user, only: [:edit, :update]
   before_action :set_one_month, only: :show
   before_action :admin_or_correct_user, only: :show
 
@@ -36,11 +36,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update_attributes(user_params)
+    if @user.update_attributes(user_info_params)
       flash[:success] = "ユーザー情報を更新しました。"
       redirect_to @user
     else
-      render :edit      
+      render :edit
     end
   end
 
@@ -73,6 +73,8 @@ class UsersController < ApplicationController
     
   end
   
+
+  
   
     def admin_or_correct_user
       @user = User.find(params[:user_id]) if @user.blank?
@@ -89,7 +91,7 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
     end
 
-    def basic_info_params
-      params.require(:user).permit(:department, :basic_time, :work_time, :designation_duty_start, :designation_duty_finish_time )
+    def user_info_params
+      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :employee_number, :card_id, :basic_time, :work_time, :designation_duty_start_time, :designation_duty_finish_time )
     end
 end

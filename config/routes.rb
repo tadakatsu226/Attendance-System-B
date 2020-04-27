@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       patch 'attendances/update_one_month'
       get 'edit_overtime_request'
       patch 'update_overtime_request'
+      get 'user'
     end
     
     resources :attendances, only: :update 

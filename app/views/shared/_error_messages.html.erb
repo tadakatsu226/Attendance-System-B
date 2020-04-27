@@ -1,5 +1,5 @@
-<% @users.each do |user| %>
-  <% if user.errors.any? %>
+<%# @users.each do |user| %>
+  <% if @user.errors.any? %>
     <div id="error_explanation">
       <div class="alert alert-danger">
         入力エラーが<%= @user.errors.count %>件ありました。
@@ -11,4 +11,4 @@
       </ul>
     </div>
   <% end %>
-<% end %>  
+<%# end %>  
