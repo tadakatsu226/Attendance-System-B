@@ -1,0 +1,31 @@
+<% provide(:class_text, 'office-info') %>
+<% provide(:button_text, '更新') %>
+
+      <h1 class="modal-title">拠点情報の更新</h1>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <%= form_with(model: @office, local: true, method: :patch) do |f| %>
+            <%#= render 'shared/error_messages', object: @user %>
+
+
+            <%= f.label :拠点番号, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :office_number, class: "form-control" %>
+            
+            <div class="work-time">
+            <%= f.label :拠点名, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :office_name, class: "form-control" %>
+            </div>
+            
+            <div class="work-time">
+            <%= f.label :勤怠種類, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :attendance_type, class: "form-control" %>
+            </div>
+            
+            <div class="center">
+              <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>

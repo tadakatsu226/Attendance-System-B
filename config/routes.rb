@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
   
   resources :users do
-     member do
+    member do
       get 'edit_basic_info'
       patch 'update_basic_info'
       get 'attendances/edit_one_month'
@@ -17,9 +17,12 @@ Rails.application.routes.draw do
       get 'edit_overtime_request'
       patch 'update_overtime_request'
       get 'user'
-    end
+      get 'going_to_work'
+    end  
+  end
     
-    resources :attendances, only: :update 
-     
- end
+  resources :attendances 
+  
+  resources :offices
+  
 end

@@ -54,8 +54,10 @@ class AttendancesController < ApplicationController
         redirect_to(root_url)
       end
   end
-   
   
+  
+
+
   private
   
     def attendances_params

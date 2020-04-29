@@ -73,6 +73,19 @@ class UsersController < ApplicationController
     
   end
   
+  
+  def going_to_work
+    #   @attnedances = Attendance.find(params[:id]) 
+    # @user = @attendances.user_id
+    # @user = User.find(params[:id])
+    # @attendances = @user.attendances
+    
+    # if @attendances.started_at.present? && @attendances.finished_at.nil? 
+      
+     @users = User.all
+    # end
+  end
+  
 
   
   

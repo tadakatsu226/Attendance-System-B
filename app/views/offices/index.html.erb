@@ -1,0 +1,39 @@
+<h1>拠点一覧</h1>
+<table class="table table-striped table-bordered" >
+   <thead>
+     <tr>
+       <th></th>   
+       <th></th>
+       <th>拠点番号</th>  
+       <th>拠点名</th>  
+       <th>勤怠種類</th>  
+     </tr>
+   </thead> 
+   <tbody>
+       <tr>
+         <td>
+            <%= link_to "修正", edit_office_path(@offices), class: 'btn btn-md btn-primary' %>
+         </td>
+         <td>
+            <%= link_to "削除", "#", class: "btn btn-md btn-primary", method: :delete,
+                data: { confirm: "削除してよろしいですか？" } %>
+         </td>
+         <% @offices.each do |office| %>
+         <td><%= office.office_number %></td>
+         <td><%= office.office_name %></td>
+         <td><%= office.attendance_type %></td>
+         <% end %>
+       </tr>  
+   </tbody> 
+   
+</table>
+      <tr>
+        <td class="active">
+          <a class="btn btn-lg btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">拠点情報追加</a>
+          <div class="collapse" id="collapseExample">
+             <div class="card card-body">
+                <%= render partial: 'office', locals: {office: @offices} %>
+              </div>
+          </div> 
+        </td>
+      </tr>
