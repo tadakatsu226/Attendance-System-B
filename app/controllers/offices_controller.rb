@@ -1,5 +1,7 @@
 class OfficesController < ApplicationController
-    
+  before_action :set_office, only: [:show, :edit, :update, :destroy]
+
+  
   def index
     @offices = Office.all
     # @office = Office.find(params[:id])
@@ -22,37 +24,46 @@ class OfficesController < ApplicationController
     redirect_to offices_url
     else
     flash[:danger] = "拠点情報は追加されませんでした"
-    redirect_to offices_url
+    render :office
     end  
   end
     
 
   def edit
-    @office = Office.find(params[:id])
-    
+
   end
   
   def update
     
+    if @office.update(office_params)
+      flash[:success] = "拠点情報を更新しました。"
+      redirect_to offices_url
+    else
+      render :edit
+    end
   end
   
   
-  # def destroy
-  #   @user.destroy
-  #   flash[:success] = "#{@user.name}のデータを削除しました。"
-  #   redirect_to users_url
-  # end
+  def destroy
+    @office.destroy
+    flash[:success] = "#{@office.office_name}のデータを削除しました。"
+    redirect_to offices_url
+  end
   
-  
+ 
+ 
+  def set_office
+    @office = Office.find(params[:id])
+  end
+ 
+ 
+
   private
   
   def office_params
     params.require(:office).permit(:office_name, :office_number, :attendance_type) 
   end
 
-  
-  
-  
-  
+ 
   
 end

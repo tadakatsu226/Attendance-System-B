@@ -22,9 +22,12 @@
                     <th>日付</th>
                     <th>曜日</th>
                     <th>終了予定時間</th>
-                    <th>翌日</th>
+                    <th>指定勤務終了時間</th>
+                    <th>時間外時間</th>
                     <th>業務処理内容</th>
                     <th>指示者確認㊞</th>
+                    <th>変更</th>
+                    <th>勤怠を確認する</th>
                   </tr>
                 </thead>  
                 <tbody>
@@ -32,9 +35,15 @@
                     <td><%= l(@day, format: :short) %></td>
                     <td><%= $days_of_the_week[@day.wday] %></td>
                     <td><%= f.time_field :finished_at, class: "form-control" %></td>
-                    <td><%= f.check_box :tomorow,{class: 'chk'} %></td>
+                    <td><%= f.time_field :attendances_finished_at, class: "form-control" %></td>
+                    <td><%= f.time_field :off_hours_time, class: "form-control" %></td>
                     <td><%= f.text_field :work_contents, :size=>"35" %></td>
-                    <td><%= f.select :mark_of_instructor, [["選択してください"],["上長1"],["上長2"]]%></td>
+                    <td><%= f.select :mark_of_instructor, [["選択してください"],["申請中"],["承認"],["否認"]%></td>
+                    <td><%= f.check_box :tomorow,{class: 'chk'} %></td>
+                    <tr></tr>
+                    
+                    
+                    
                   </tr>
                 </tbody>
               </table>    

@@ -6,14 +6,14 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           <%= form_with(model: @office, url: offices_path, local: true, method: :patch) do |f| %>
-            <%#= render 'shared/error_messages', object: @user %>
+            <%= render 'shared/error_messages', object: @user %>
 
 
             <%= f.label :拠点番号, class: "label-#{yield(:class_text)}" %>
             <%= f.text_field :office_number, class: "form-control" %>
             
             <div class="work-time">
-            <%= f.label :拠点名, class: "label-#{yield(:class_text)}" %>
+            <% f.label :拠点名, class: "label-#{yield(:class_text)}" %>
             <%= f.text_field :office_name, class: "form-control" %>
             </div>
             

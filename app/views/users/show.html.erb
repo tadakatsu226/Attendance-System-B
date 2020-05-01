@@ -29,13 +29,25 @@
 
 
 
-    <% if current_user.admin %>
+    <% if current_user.superior %>
     <ul class="infomation">
-      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %></li>
-      <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %></li>
-      <li><%=link_to "【残業申請のお知らせ】", "#" , class: "apprication-info" %></li>
+      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %>
+      <dic class="box1">件の通知があります</dic></li>
+      
+      
+      <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %>
+      <dic class="box1">件の通知があります</dic></li>
+      
+      
+      <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior1_user_path(@user.id), class: "apprication-info" %>
+      <dic class="box1">件の通知があります</dic></li>
+      
+      
     </ul>
     <% end %>
+    
+    
+    
     
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>

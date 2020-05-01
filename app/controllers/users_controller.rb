@@ -74,6 +74,11 @@ class UsersController < ApplicationController
   end
   
   
+  def edit_overtime_request_superior1
+    
+  end
+  
+  
   def going_to_work
     #   @attnedances = Attendance.find(params[:id]) 
     # @user = @attendances.user_id
