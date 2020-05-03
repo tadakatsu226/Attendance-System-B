@@ -35,7 +35,7 @@ class OfficesController < ApplicationController
   
   def update
     
-    if @office.update(office_params)
+    if @office.update_attributes!(office_params)
       flash[:success] = "拠点情報を更新しました。"
       redirect_to offices_url
     else
@@ -61,7 +61,7 @@ class OfficesController < ApplicationController
   private
   
   def office_params
-    params.require(:office).permit(:office_name, :office_number, :attendance_type) 
+    params.permit(:office_name, :office_number, :attendance_type) 
   end
 
  
