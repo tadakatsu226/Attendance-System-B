@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request, :update_overtime_request,
-                                   :edit_overtime_request_superior1, :update_overtime_request_superior1]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request, :update_overtime_request,
-                                        :edit_overtime_request_superior1, :update_overtime_request_superior1]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior1, :update_overtime_request_superior1]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior1, :update_overtime_request_superior1]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
   before_action :admin_or_correct_user, only: [:edit, :update]
   before_action :set_one_month, only: :show
@@ -67,21 +65,7 @@ class UsersController < ApplicationController
   end
   
   
-  def edit_overtime_request
-    @day = Date.parse(params[:day])
-  end
   
-  
-  def update_overtime_request
-      # @user = User.find(params[:user_id])
-      @attendance = Attendance.find(params[:id])
-    if @attendance.update_attributes(attendance_params)
-      flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
-    else
-      render :edit
-    end
-  end
   
   
   def edit_overtime_request_superior1
@@ -107,6 +91,14 @@ class UsersController < ApplicationController
     # end
   end
   
+  
+  
+  
+  def import
+  User.import(params[:file])
+  redirect_to users_url
+  end
+  
 
   
   
@@ -128,9 +120,5 @@ class UsersController < ApplicationController
     def user_info_params
       params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :employee_number, :card_id,
       :basic_time, :work_time, :designation_duty_start_time, :designation_duty_finish_time)
-    end
-    
-    def attendance_params
-      params.permit(:work_end_time, :instructor, :job_description)
     end
 end
