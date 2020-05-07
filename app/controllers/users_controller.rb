@@ -9,7 +9,8 @@ class UsersController < ApplicationController
 
   def index
     # @users = User.paginate(page: params[:page]).search(params[:search])
-    @users = User.where.not(id: 1).all
+    @users = User.all
+    # @users = User.where.not(id: 1).all
   end
 
   def show
@@ -95,8 +96,14 @@ class UsersController < ApplicationController
   
   
   def import
-  User.import(params[:file])
-  redirect_to users_url
+    if params[:file].blank?
+      redirect_to users_url  
+      flash[:danger] = "ファイルが選択されていません。"
+    else
+     User.import(params[:file])
+      redirect_to users_url
+      flash[:success] = "CSVインポートに成功しました。"
+    end  
   end
   
 
@@ -118,7 +125,7 @@ class UsersController < ApplicationController
     end
 
     def user_info_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :employee_number, :card_id,
-      :basic_time, :work_time, :designation_duty_start_time, :designation_duty_finish_time)
+      params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation, :employee_number, :uid,
+      :basic_work_time, :work_time, :designated_work_start_time, :designated_work_end_time)
     end
 end
