@@ -6,12 +6,10 @@
 // }
 
 .box1 {
- margin: 2em auto;
- padding: 0em;
- width: 90%;
+ padding: 0px;
  background-color: #fff; /* 背景色 */
- border: 3px solid red; /* 枠線 */
+ border: 2px solid red; /* 枠線 */
  color: red;
-
+ display: inline-block;
 }
 

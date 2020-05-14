@@ -1,16 +1,17 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:show, :edit_one_month ]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
+  before_action :set_one_month, only: [:csv_output, :edit_one_month]
 
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
 
   def new
-    @attendance = Attendance.find(params[:user_id])
-    @use = User.find(params[:id])
+    @attendance = Attendance.find(params[:id])
+  
+    # @user = User.find(params[:id])
   end
     
   
@@ -21,7 +22,17 @@ class AttendancesController < ApplicationController
     # redirect_to show
   end
   
-
+  def csv_output
+      respond_to do |format|
+      format.html do
+          #html用の処理を書く
+      end 
+      format.csv do
+          #csv用の処理を書く
+          send_data render_to_string, filename: "勤怠.csv", type: :csv
+      end
+    end
+  end
   
 
   def update
@@ -65,21 +76,33 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request
-   
-    # @attendance = @user.attendances.find_by(worked_on: @day) 
+      @attendance = Attendance.find(params[:id])
+  
+    # @day=Date.parse(params[:day])
+    # @user=User.find(params[:id])
   end
   
   
   def update_overtime_request
-      # @user = User.find(params[:user_id])
-     
-    if @attendance.update_attributes(attendance_params)
+       attendance = Attendance.find(params[:id])  
+    if attendance.update(attendance_params)
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to users_url
     else
-      render :edit
+      render :edit_overtime_request
+      
     end
   end
+  
+  
+  def edit_overtime_request_superior1
+    
+  end
+  
+  def update_overtime_request_superior1
+    
+  end
+  
   
   
   def admin_or_correct_user
@@ -95,8 +118,9 @@ class AttendancesController < ApplicationController
 
   private
   
-    def attendances_params
-      params.require(:attendance).permit(:worked_on, :overtime, :started_at, :finished_at, :note, :work_end_time, :instructor, :job_description)
+    def attendance_params
+      
+      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description)
     end
     
 end

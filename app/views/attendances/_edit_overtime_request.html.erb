@@ -10,8 +10,8 @@
        <h1 class="modal-title">【残業申請】</h1>
     </div>
     <div class="modal-body">
-          <%= form_with(model: @attendance, url: update_overtime_request_user_attendance_path, local: true, method: :patch) do |f| %>
-            <%#= render 'shared/error_messages', object: @user %>
+          <%= form_with(model: @attendance, url: update_overtime_request_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+            <%= render 'shared/error_messages', object: @user %>
             
               <table class="table table-bordered" id="table-attendances">
                 <thead>
@@ -25,16 +25,14 @@
                   </tr>
                 </thead>  
                 <tbody>
-                  <% @attnedances.each do |day| %>
                   <tr>
-                    <td><%= l(day.worked_on, format: :short) %></td>
-                    <td><%= $days_of_the_week[day.worked_on.wday] %></td>
-                    <td><%= f.time_field :work_end_time, class: "form-control" %></td>
-                    <td><%= f.check_box :day_after%></td>
+                    <td><%= l(@attendance.worked_on, format: :short) %></td>
+                    <td><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+                    <td><%= f.time_field:work_end_time, class: "form-control" %></td>
+                    <td><%= f.check_box :day_after %></td>
                     <td><%= f.text_field :job_description, :size=>"35" %></td>
                     <td><%= f.select :instructor, [["選択してください"],["上長1",1],["上長2",2]]%></td>
                   </tr>
-                  <% end %>
                 </tbody>
               </table>    
             <div class="center">

@@ -16,6 +16,7 @@ class UsersController < ApplicationController
   def show
    @worked_sum = @attendances.where.not(started_at: nil).count
   # @attendances = @user.attendances
+
   end
 
   def new
@@ -69,15 +70,15 @@ class UsersController < ApplicationController
   
   
   
-  def edit_overtime_request_superior1
-    @day = Date.parse(params[:day]) 
-    # @attendance = Attendance.find(params[:id])
-    # @user = User.find(params[:id])
-  end
+  # def edit_overtime_request
+  #   # @day = Date.parse(params[:day]) 
+  #   # @attendance = Attendance.find(params[:id])
+  #   # @user = User.find(params[:id])
+  # end
   
-  def update_overtime_request_superior1
+  # def update_overtime_request_superior1
     
-  end
+  # end
   
   
   def going_to_work
