@@ -22,8 +22,8 @@ Rails.application.routes.draw do
       member do
         get 'edit_overtime_request'
         patch 'update_overtime_request'
-        get 'edit_overtime_request_superior1'
-        patch 'update_overtime_request_superior1' 
+        get 'edit_overtime_request_superior3'
+        patch 'update_overtime_request_superior3' 
         get 'csv_output'
       end
     end  

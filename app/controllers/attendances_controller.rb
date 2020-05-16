@@ -93,11 +93,17 @@ class AttendancesController < ApplicationController
   end
   
   
-  def edit_overtime_request_superior1
-    
+  def edit_overtime_request_superior3
+     @attendances = Attendance.where(instructor:"1")
+     
   end
   
-  def update_overtime_request_superior1
+  
+  
+  
+  
+  
+  def update_overtime_request_superior3
     
   end
   

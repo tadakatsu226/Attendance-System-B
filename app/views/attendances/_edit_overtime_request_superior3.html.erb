@@ -7,10 +7,10 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-       <!--<h2 class="modal-title">【残業申請】</h2>-->
     </div>
-    <div class="modal-body">
-          <%= form_with(model: @attendance, url: update_overtime_request_superior1_user_attendance_path, local: true, method: :patch) do |f| %>
+    <% @attendances.each do |attendance| %>
+       <div class="modal-body">
+          <%= form_with(url: update_overtime_request_superior3_user_attendance_path, local: true, method: :patch) do |f| %>
             <%#= render 'shared/error_messages', object: @user %>
             
               <table class="table table-bordered" id="table-attendances">
@@ -30,22 +30,23 @@
                 </thead>  
                 <tbody>
                   <tr>
-                    <td><%#= l(@day, format: :short) %></td>
-                    <td><%#= $days_of_the_week[@day.wday] %></td>
-                    <td><%= f.time_field :work_end_time, class: "form-control" %></td>
+                    <td><%= l(attendance.worked_on, format: :short) %></td>
+                    <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                    <td><%= l attendance.work_end_time, format: :time %></td>
                     <td><%= f.time_field :designated_work_end_time, class: "form-control" %></td>
                     <td><%= f.time_field :overtime, class: "form-control" %></td>
                     <td><%= f.text_field :job_description, :size=>"35" %></td>
-                    <td><%= f.select :instructor, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
+                    <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
                     <td><%= f.check_box :day_after,{class: 'chk'} %></td>
                     <td><%= link_to "確認", "#", class: "btn btn-primary" %></td>
                   </tr>
                 </tbody>
               </table>    
             <div class="center">
-              <%= f.submit yield(:button_text), class: "btn btn-lg btn-primary btn-#{yield(:class_text)}" %>
+              <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
             </div>
           <% end %>
-    </div>
+       </div>
+    <% end %> 
   </div>
 </div>

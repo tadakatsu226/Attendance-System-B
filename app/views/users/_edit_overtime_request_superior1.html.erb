@@ -1,5 +1,5 @@
-<!--<% provide(:class_text, 'overtime-request') %>-->
-<!--<% provide(:button_text, '変更を送信する') %>-->
+<!--<%# provide(:class_text, 'overtime-request') %>-->
+<!--<%# provide(:button_text, '変更を送信する') %>-->
 
 <!--<div class="modal-dialog modal-lg modal-dialog-center">-->
 <!--  <div class="modal-content">-->
@@ -29,22 +29,22 @@
           <!--      </thead>  -->
           <!--      <tbody>-->
           <!--        <tr>-->
-          <!--          <td><%= l(@day, format: :short) %></td>-->
-          <!--          <td><%= $days_of_the_week[@day.wday] %></td>-->
-          <!--          <td><%= f.time_field :work_end_time, class: "form-control" %></td>-->
-          <!--          <td><%= f.time_field :designated_work_end_time, class: "form-control" %></td>-->
-          <!--          <td><%= f.time_field :overtime, class: "form-control" %></td>-->
-          <!--          <td><%= f.text_field :job_description, :size=>"35" %></td>-->
-          <!--          <td><%= f.select :instructor, [["選択してください"],["申請中",1],["承認",2],["否認",3]]%></td>-->
-          <!--          <td><%= f.check_box :day_after,{class: 'chk'} %></td>-->
+          <!--          <td><%#= l(@day, format: :short) %></td>-->
+          <!--          <td><%#= $days_of_the_week[@day.wday] %></td>-->
+          <!--          <td><%#= f.time_field :work_end_time, class: "form-control" %></td>-->
+          <!--          <td><%#= f.time_field :designated_work_end_time, class: "form-control" %></td>-->
+          <!--          <td><%#= f.time_field :overtime, class: "form-control" %></td>-->
+          <!--          <td><%#= f.text_field :job_description, :size=>"35" %></td>-->
+          <!--          <td><%#= f.select :instructor, [["選択してください"],["申請中",1],["承認",2],["否認",3]]%></td>-->
+          <!--          <td><%#= f.check_box :day_after,{class: 'chk'} %></td>-->
           <!--          <tr></tr>-->
           <!--        </tr>-->
           <!--      </tbody>-->
           <!--    </table>    -->
           <!--  <div class="center">-->
-          <!--    <%= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>-->
+          <!--    <%#= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>-->
           <!--  </div>-->
-          <!--<% end %>-->
+          <!--<%# end %>-->
 <!--    </div>-->
 <!--  </div>-->
 <!--</div>-->

@@ -29,8 +29,8 @@
 
 
 
-  <% if current_user.superior1 || current_user.superior2 %>
-    <ul class="infomation">
+<% if current_user.superior1 || current_user.superior2 %>
+   <ul class="infomation">
       <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %>
       <div class="box1">件の通知があります</div></li>
       
@@ -40,7 +40,7 @@
       <div class="box1">件の通知があります</div></li>
       
       <% if current_user.superior1 && request_count1.present? && request_count1 != 0 || current_user.superior2 && request_count2.present? && request_count2 != 0 %>
-      <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior1_user_attendance_path(@user), remote: true, class: "apprication-info" %>
+      <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior3_user_attendance_path(@user), remote: true, class: "apprication-info" %>
       <% else %>
       <li>【残業申請のお知らせ】</li>
       <% end %>
@@ -50,8 +50,9 @@
      <div class="box1"> <%= request_count2 %>件の通知があります</div>
       <% end %>
       </li>
-    </ul>
-  <% end %>
+      
+   </ul>
+<% end %>
     
     
     
@@ -137,7 +138,7 @@
           
           <td>
               <% if day.work_end_time.present? %>
-              <%= over_times(format_basic_info(@user.designation_duty_finish_time).to_datetime, day.work_end_time ) %> 
+              <%= overtime=over_time(format_basic_info(@user.designation_duty_finish_time).to_datetime, day.work_end_time ) %> 
               <% end %>
           </td>
           
@@ -197,6 +198,6 @@
 
 <!--モーダルウインドウ表示-->
 <div id="edit-overtime-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="edit-overtime-request-superior1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="edit-overtime-request-superior3" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 
