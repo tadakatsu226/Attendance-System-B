@@ -86,11 +86,9 @@ class AttendancesController < ApplicationController
   def update_overtime_request
        attendance = Attendance.find(params[:id])  
     if attendance.update(attendance_params)
-      flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to users_url
+      flash[:success] = "残業を申請しました。"
+      redirect_to user_url(current_user)
     else
-      render :edit_overtime_request
-      
     end
   end
   
@@ -103,6 +101,8 @@ class AttendancesController < ApplicationController
     
   end
   
+  
+
   
   
   def admin_or_correct_user

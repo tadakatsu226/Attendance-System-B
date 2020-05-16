@@ -14,4 +14,27 @@ module AttendancesHelper
   def working_times(start, finish)
     format("%.2f", (((finish - start) / 60) / 60.0))
   end
+  
+  def over_times(work_end_time, designation_duty_finish_time)
+    format("%.2f", (((designation_duty_finish_time - work_end_time ) / 60) / 60.0))
+  end
+  
+  
+  def request_count1
+    Attendance.where(instructor:"1").count
+  
+  end
+  
+  def request_count2
+    Attendance.where(instructor:"2").count
+  end
+  
+  
+  
+  
+  
+  
+  
 end
+
+
