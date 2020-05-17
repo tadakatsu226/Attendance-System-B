@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'going_to_work'
+      get 'check_show'
+      
     end 
     collection { post :import }
     

@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior1, :update_overtime_request_superior1]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior1, :update_overtime_request_superior1]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior3, :update_overtime_request_superior3, :check_show]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior3, :update_overtime_request_superior3]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
   before_action :admin_or_correct_user, only: [:edit, :update]
-  before_action :set_one_month, only: :show
-  before_action :admin_or_correct_user, only: :show
+  before_action :set_one_month, only: [:show, :check_show]
+  before_action :admin_or_correct_user, only: [:show, :check_show]
+  
 
 
   def index
@@ -17,6 +18,15 @@ class UsersController < ApplicationController
    @worked_sum = @attendances.where.not(started_at: nil).count
 
   end
+  
+  def check_show
+    
+  end
+  
+  
+  
+  
+  
 
   def new
     @user = User.new

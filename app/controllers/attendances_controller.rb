@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
   before_action :set_one_month, only: [:csv_output, :edit_one_month]
@@ -95,6 +95,7 @@ class AttendancesController < ApplicationController
   
   def edit_overtime_request_superior3
      @attendances = Attendance.where(instructor:"1")
+     @users = User.all
      
   end
   
