@@ -12,10 +12,9 @@
        <div class="modal-body">
           <%= form_with(model: @attendance, url: update_overtime_request_superior3_user_attendance_path, local: true, method: :patch) do |f| %>
             <%#= render 'shared/error_messages', object: @user %>
-            <%# @users.each do |user| %>
               <table class="table table-bordered" id="table-attendances">
                 <thead>
-                  <p class="overtime-title">【からの残業申請】</p>
+                  <p class="overtime-title">【<%= attendance.user.name %>からの残業申請】</p>
                   <tr>
                     <th>日付</th>
                     <th>曜日</th>
@@ -38,11 +37,10 @@
                       <td><%= attendance.job_description %></td>
                       <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
                       <td><%= f.check_box :day_after,{class: 'chk'} %></td>
-                      <td><%= link_to "確認", check_show_user_path(@user), :target=>["_blank"], class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", check_show_user_path(attendance.user), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
                 </tbody>
               </table> 
-              <%# end %> 
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
             </div>

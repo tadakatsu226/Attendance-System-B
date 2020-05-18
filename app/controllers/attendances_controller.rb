@@ -94,10 +94,11 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request_superior3
-     @attendances = Attendance.where(instructor:"1")
-     @users = User.all
-     
+    @attendances = Attendance.includes(:user).where(instructor:"1")
+    
   end
+  
+  
   
   
   

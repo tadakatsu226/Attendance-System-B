@@ -135,7 +135,7 @@
           
           <td>
               <% if day.work_end_time.present? %>
-              <%= overtime=over_time(format_basic_info(@user.designation_duty_finish_time).to_datetime, day.work_end_time ) %> 
+              <%= overtime=over_time(format_basic_info(@user.designation_duty_finish_time).to_datetime, day.work_end_time.to_datetime ) %> 
               <% end %>
           </td>
           
