@@ -95,7 +95,6 @@ class AttendancesController < ApplicationController
   
   def edit_overtime_request_superior3
     @attendances = Attendance.includes(:user).where(instructor:"1")
-    
   end
   
   

@@ -21,6 +21,7 @@ class UsersController < ApplicationController
   
   def check_show
     
+    
   end
   
   

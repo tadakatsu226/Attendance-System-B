@@ -26,42 +26,6 @@
 
 
 
-<% if current_user.superior1 || current_user.superior2 %>
-   <ul class="infomation">
-      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %>
-      <div class="box1">件の通知があります</div></li>
-      
-      
-      
-      <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %>
-      <div class="box1">件の通知があります</div></li>
-      
-      <% if current_user.superior1 && request_count1.present? && request_count1 != 0 || current_user.superior2 && request_count2.present? && request_count2 != 0 %>
-      <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior3_user_attendance_path(@user), remote: true, class: "apprication-info" %>
-      <% else %>
-      <li>【残業申請のお知らせ】</li>
-      <% end %>
-      <% if current_user.superior1 && request_count1.present? && request_count1 != 0 %>
-     <div class="box1"> <%= request_count1 %>件の通知があります</div>
-      <% elsif current_user.superior2 && request_count2.present? && request_count2 != 0 %>
-     <div class="box1"> <%= request_count2 %>件の通知があります</div>
-      <% end %>
-      </li>
-      
-   </ul>
-<% end %>
-    
-    
-    
-    
-<div class="btn-users-show">
-  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-  <%= link_to "CSV 出力", csv_output_user_attendance_path(@user.attendances, format: :csv), class: "btn btn-primary" %><br>
-  <div class="col-md-2 col-xs-3">
-  <%= link_to "勤怠修正ログ (承認済)", "#" , class: "btn btn-block btn-primary" %>
-  </div>
-</div>
-
 <div>
   <table class="table table-bordered table-condensed table-striped" id="table-attendances">
     <thead>
@@ -96,42 +60,42 @@
     <tbody>
       <% @attendances.each do |day| %>
         <tr>
-          <td><%= link_to "残業承認", edit_overtime_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
+          <td></td>
           <td><%= l(day.worked_on, format: :short) %></td>   
           
           <td>
              <% $days_of_the_week[day.worked_on.wday] %>
              <% if day.worked_on.wday == 6 %>
-             <font color="#00f"><%= $days_of_the_week[day.worked_on.wday] %></font>
+             <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
              <% elsif day.worked_on.wday == 0 %>
-             <font color="#f00"><%= $days_of_the_week[day.worked_on.wday] %></font>
+             <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
              <% else %>
              <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
              <% end %>
           </td>    
 
           <td><%= l(day.started_at, format: :time_hour) if day.started_at.present? %></td>
+          
           <td><%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %></td>
-          <td style="width: 10%" "height: 10%">
-          　<% if btn_text = attendance_state(day) %>
-          　<%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-block btn-sm btn-primary btn-attendance" %>
-   　　　  　　 <% end %>
-          </td>
+          
+          <td style="width: 10%" "height: 10%"> </td>
+
           <td><%= l(day.finished_at, format: :time_hour) if day.finished_at.present? %></td>
+          
           <td><%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %></td>
+          
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
               <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
+          
           <td><%= day.note %></td>
-          
-          
+
           <td><%= l(day.work_end_time, format: :time_hour) if day.work_end_time.present? %></td>
+          
           <td><%= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) if day.work_end_time.present? %></td>
-          
-          
           
           <td>
               <% if day.work_end_time.present? %>
@@ -140,9 +104,7 @@
           </td>
           
           <td><%= day.job_description %></td>
-          
-          
-          
+
           <td style="width: 15%">
             <% if day.instructor =="1" %>
               <p>上長1: 残業申請中</p>
@@ -173,21 +135,7 @@
           <td colspan="5"></td>
           <td><%= format("%.2f", @total_working_times.to_f) %></td>
           <td colspan="5"></td>
-          <td>
-           所属長承認　未
-            <div class="dropdown">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">　　　　
-              <span class="caret"></span>
-              </button>
-                <div class="dropdown-menu">
-                  <li class= "dropdown-item"><%= link_to "上長A", current_user %></li>
-                  <li class= "dropdown-item"><%= link_to "上長B", current_user %></li>
-                </div>
-            </div>
-            <div class="Approval">
-            <%= link_to "承認", "#", class: "btn btn-block btn-primary" %>
-            </div>
-          </td>
+          <td></td>
         </tr>
     </tfoot>
   </table>
