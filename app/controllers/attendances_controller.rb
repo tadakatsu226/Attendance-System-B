@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3, :edit_overtime_request_superior4]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
   before_action :set_one_month, only: [:csv_output, :edit_one_month]
@@ -67,10 +67,10 @@ class AttendancesController < ApplicationController
           attendance.update_attributes!(item)
        end
     end
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
+    flash[:success] = "申請しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
@@ -78,7 +78,7 @@ class AttendancesController < ApplicationController
   def edit_overtime_request
       @attendance = Attendance.find(params[:id])
   
-    # @day=Date.parse(params[:day])
+    # @day=Date.parse(params[:day])s
     # @user=User.find(params[:id])
   end
   
@@ -94,17 +94,28 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request_superior3
-    @attendances = Attendance.includes(:user).where(instructor:"1")
+     @attendance = Attendance.includes(:user).where(instructor:"1")
+  end
+  
+
+  def update_overtime_request_superior3
+        attendance = Attendance.find(params[:id])
+   if attendance.change == "1" 
+     if @attendance.update(attendance_params)
+      flash[:success] = "勤怠の変更を確認しました。"
+      redirect_to user_url(current_user)
+      
+     end
+   end
   end
   
   
+  def edit_overtime_request_superior4
+     @attendance = Attendance.includes(:user).where(instructor:"2")
+  end
   
   
-  
-  
-  
-  
-  def update_overtime_request_superior3
+  def update_overtime_request_superior4
     
   end
   
@@ -126,8 +137,11 @@ class AttendancesController < ApplicationController
   private
   
     def attendance_params
-      
-      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description)
+      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description, :request)
     end
-    
+     
+    def attendances_params
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :instructor])[:attendances] 
+    end
+
 end
