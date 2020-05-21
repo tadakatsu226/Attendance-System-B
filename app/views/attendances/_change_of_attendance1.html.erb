@@ -1,0 +1,68 @@
+<% provide(:class_text, 'change_of_attendance1') %>
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+       
+    </div>
+     <h2 class="modal-title">【<%#= %>からの勤怠変更申請】</h2>
+       <div class="modal-body">
+          <%= form_with(model: @attendance, url: change_of_attendance1_request_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+            <%= render 'shared/error_messages', object: @user %>
+                <% @attendance.each do |attendance| %>
+              <table class="table table-bordered" id="table-attendances">
+                <thead>
+                  <tr>
+                    <th rowspan="3">日付</th>
+                    <th rowspan="3">曜日</th>
+                    <th colspan="4">変更前</th><th colspan="4">変更後</th>
+                    <th rowspan="3">備考</th>
+                    <th rowspan="3">指示者確認㊞</th>
+                    <th rowspan="3">変更</th>
+                    <th rowspan="3">勤怠を確認する</th>
+                  </tr>
+                  <tr>
+                    <th colspan="2">出社</th><th colspan="2">退社</th><th colspan="2">出社</th><th colspan="2">退社</th>
+                  </tr>
+                  <tr>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
+                  </tr>
+                </thead>  
+                <tbody>
+                    <tr>
+                      <td><%= l(attendance.worked_on, format: :short) %></td>
+                      <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
+                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
+                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
+                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
+                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
+                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
+                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
+                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
+                      <td><%= attendance.note %></td>
+                      <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
+                      <td><%= f.check_box :change %></td>
+                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
+                    </tr>
+                </tbody>
+              </table>
+                <% end %>
+            <div class="center">
+              <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>  
+       </div>
+  </div>
+</div>

@@ -28,6 +28,10 @@ Rails.application.routes.draw do
         patch 'update_overtime_request_superior3' 
         get 'edit_overtime_request_superior4'
         patch 'update_overtime_request_superior4' 
+        get 'change_of_attendance1'
+        patch 'change_of_attendance1_request'
+        get 'change_of_attendance2'
+        patch 'change_of_attendance2_request'
         
         get 'csv_output'
       end

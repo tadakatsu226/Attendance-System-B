@@ -36,7 +36,7 @@
 
 
       <% if current_user.superior1 && @attendance_request.where(instructor: "3").count.present? && @attendance_request.where(instructor: "3").count !=0 %>
-      <li><%=link_to "【勤怠変更申請のお知らせ@】", "#" , class: "apprication-info" %>
+      <li><%=link_to "【勤怠変更申請のお知らせ@】", change_of_attendance1_user_attendance_path(@user), remote: true , class: "apprication-info" %>
       <% elsif current_user.superior1 && !current_user.superior2 %>
       <p>【勤怠変更申請のお知らせ@】</p>
       <% end %>
@@ -45,7 +45,7 @@
       <% end %></li>
       
       <% if current_user.superior2 && @attendance_request.where(instructor: "4").count.present? && @attendance_request.where(instructor: "4").count !=0 %>
-      <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %>
+      <li><%=link_to "【勤怠変更申請のお知らせ】", change_of_attendance2_user_attendance_path(@user), remote: true , class: "apprication-info" %>
       <% elsif !current_user.superior1 && current_user.superior2 %>
       <p>【勤怠変更申請のお知らせ】</p>
       <% end %>
@@ -225,5 +225,7 @@
 <div id="edit-overtime-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="edit-overtime-request-superior3" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="edit-overtime-request-superior4" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="change-of-attendance1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="change-of-attendance2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 

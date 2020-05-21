@@ -1,0 +1,57 @@
+<% provide(:class_text, 'change_of_attendance2') %>
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+   
+       <div class="modal-body">
+         
+          <%= form_with(model: @attendance, url: change_of_attendance2_request_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+            <%#= render 'shared/error_messages', object: @user %>
+                <% @attendance.each do |attendance| %>
+              <table class="table table-bordered" id="table-attendances">
+              
+                <thead>
+                  <p class="overtime-title">【<%=attendance.user.name %>からの勤怠変更申請】</p>
+                  <tr>
+                    <th>日付</th>
+                    <th>曜日</th>
+                    <th>終了予定時間</th>
+                    <th>指定勤務終了時間</th>
+                    <th>時間外時間</th>
+                    <th>業務処理内容</th>
+                    <th>指示者確認㊞</th>
+                    <th>変更</th>
+                    <th>勤怠を確認する</th>
+                  </tr>
+                </thead>  
+           
+                <tbody>
+                   
+                    <tr>
+                      <td><%= l(attendance.worked_on, format: :short) %></td>
+                      <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                      <td><%= l attendance.work_end_time, format: :time %></td>
+                      <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
+                      <td><%= f.time_field :overtime, class: "form-control" %></td>
+                      <td><%= attendance.job_description %></td>
+                      <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
+                      <td><%= f.check_box :change %></td>
+                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: attendance.worked_on), :target=>["_blank"], class: "btn btn-primary" %></td>
+                    </tr>
+                    
+                </tbody>
+              </table>
+                <% end %>
+            <div class="center">
+              <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>  
+       </div>
+  </div>
+</div>

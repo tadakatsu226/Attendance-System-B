@@ -1,6 +1,7 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3, :edit_overtime_request_superior4]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3, :edit_overtime_request_superior4, :change_of_attendance1,
+  :change_of_attendance2]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
   before_action :set_one_month, only: [:csv_output, :edit_one_month]
@@ -116,6 +117,32 @@ class AttendancesController < ApplicationController
   
   
   def update_overtime_request_superior4
+         attendance = Attendance.find(params[:id])
+   if attendance.change == "1" 
+     if @attendance.update(attendance_params)
+      flash[:success] = "勤怠の変更を確認しました。"
+      redirect_to user_url(current_user)
+      
+     end
+   end
+  end
+  
+  
+  def change_of_attendance1
+    @attendance = Attendance.includes(:user).where(instructor:"3")
+  end
+  
+  def change_of_attendance1_request
+    
+  end
+  
+  
+
+  def change_of_attendance2
+    @attendance = Attendance.includes(:user).where(instructor:"4")
+  end
+  
+  def change_of_attendance2_request
     
   end
   
