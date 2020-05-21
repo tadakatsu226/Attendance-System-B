@@ -15,8 +15,10 @@ class UsersController < ApplicationController
   end
 
   def show
+    @attendance_request = Attendance.all
+    
    @worked_sum = @attendances.where.not(started_at: nil).count
-
+   
   end
   
   def check_show

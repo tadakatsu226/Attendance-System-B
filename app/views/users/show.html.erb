@@ -31,36 +31,48 @@
 
 <% if current_user.superior1 || current_user.superior2 %>
    <ul class="infomation">
-      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %>
-      <div class="box1">件の通知があります</div></li>
+      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %></li>
+      <!--<div class="box1">件の通知があります</div>-->
 
 
-      <%# if current_user.superior1 &&  %>
+      <% if current_user.superior1 && @attendance_request.where(instructor: "3").count.present? && @attendance_request.where(instructor: "3").count !=0 %>
+      <li><%=link_to "【勤怠変更申請のお知らせ@】", "#" , class: "apprication-info" %>
+      <% elsif current_user.superior1 && !current_user.superior2 %>
+      <p>【勤怠変更申請のお知らせ@】</p>
+      <% end %>
+      <% if current_user.superior1 && @attendance_request.where(instructor: "3").count.present? && @attendance_request.where(instructor: "3").count !=0 %>
+      <div class="box1"><%= @attendance_request.where(instructor: "3").count %>件の通知があります</div>
+      <% end %></li>
+      
+      <% if current_user.superior2 && @attendance_request.where(instructor: "4").count.present? && @attendance_request.where(instructor: "4").count !=0 %>
       <li><%=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %>
-      <%# end %>
-      <%# if current_user.superior2 &&  %>
-      <%#=link_to "【勤怠変更申請のお知らせ】", "#" , class: "apprication-info" %>
-      <%# end %>
-      <div class="box1">件の通知があります</div></li>
-      
-      
+      <% elsif !current_user.superior1 && current_user.superior2 %>
+      <p>【勤怠変更申請のお知らせ】</p>
+      <% end %>
+      <% if current_user.superior2 && @attendance_request.where(instructor: "4").count.present? && @attendance_request.where(instructor: "4").count !=0 %>
+      <div class="box1"><%= @attendance_request.where(instructor: "4").count %>件の通知があります</div>
+      <% end %></li>
+
       
       
       <% if current_user.superior1 && request_count1.present? && request_count1 != 0 %>
-        <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior3_user_attendance_path(@user), remote: true, class: "apprication-info" %>
-        <% else %>【残業申請のお知らせ】
-        <% end %>
-        <% if current_user.superior1 && request_count1.present? && request_count1 != 0 %>
-        <div class="box1"> <%= request_count1 %>件の通知があります</div>
-        <% end %></li>
-        
+      <li><%=link_to "【残業申請のお知らせ@】", edit_overtime_request_superior3_user_attendance_path(@user), remote: true, class: "apprication-info" %>
+      <% elsif current_user.superior1 && !current_user.superior2 %>
+      <p>【残業申請のお知らせ@】</p>
+      <% end %>
+      <% if current_user.superior1 && request_count1.present? && request_count1 != 0 %>
+      <div class="box1"> <%= request_count1 %>件の通知があります</div>
+      <% end %></li>
+      
 
-        <% if current_user.superior2 && request_count2.present? && request_count2 != 0 %>
-        <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior4_user_attendance_path(@user), remote: true, class: "apprication-info" %>
-        <% end %>
-        <% if current_user.superior2 && request_count2.present? && request_count2 != 0 %>
-        <div class="box1"> <%= request_count2 %>件の通知があります</div>
-        <% end %></li>
+      <% if current_user.superior2 && request_count2.present? && request_count2 != 0 %>
+      <li><%=link_to "【残業申請のお知らせ】", edit_overtime_request_superior4_user_attendance_path(@user), remote: true, class: "apprication-info" %>
+      <% elsif !current_user.superior1 && current_user.superior2 %>
+      <p>【残業申請のお知らせ】</p>
+      <% end %>
+      <% if current_user.superior2 && request_count2.present? && request_count2 != 0 %>
+      <div class="box1"> <%= request_count2 %>件の通知があります</div>
+      <% end %></li>
    </ul> 
 <% end %>
     
