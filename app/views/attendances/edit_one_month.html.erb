@@ -33,17 +33,17 @@
             </td>
             
             <% if Date.current < day.worked_on %>
-              <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
-              <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
+              <td><%= attendance.time_field :begintime_at, readonly: true, class: "form-control" %></td>
+              <td><%= attendance.time_field :endtime_at, readonly: true, class: "form-control" %></td>
             <% else %>
-              <td><%= attendance.time_field :started_at, class: "form-control" %></td>
-              <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+              <td><%= attendance.time_field :begintime_at, class: "form-control" %></td>
+              <td><%= attendance.time_field :endtime_at, class: "form-control" %></td>
             <% end %>
             
             <td><%= f.check_box :tomorow,{class: 'chk'} %></td>
             <td>
-                 <% if day.started_at.present? && day.finished_at.present? %>
-                 <%= working_times(day.started_at, day.finished_at) %>
+                 <% if day.begintime_at.present? && day.endtime_at.present? %>
+                 <%= working_times(day.begintime_at, day.endtime_at) %>
                  <% end %>
             </td>
             <td><%= attendance.text_field :note, class: "form-control" %></td>

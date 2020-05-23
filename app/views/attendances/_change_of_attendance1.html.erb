@@ -7,14 +7,19 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
+     
        
     </div>
-     <h2 class="modal-title">【<%#= %>からの勤怠変更申請】</h2>
+    
+     
        <div class="modal-body">
           <%= form_with(model: @attendance, url: change_of_attendance1_request_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
-                <% @attendance.each do |attendance| %>
+            
+            
+            <% @users.each do |user| %>
               <table class="table table-bordered" id="table-attendances">
+               <h2 class="modal-title">【<%=user.name %>からの勤怠変更申請】</h2> 
                 <thead>
                   <tr>
                     <th rowspan="3">日付</th>
@@ -36,13 +41,24 @@
                     <th>時</th>
                     <th>分</th>
                     <th>時</th>
-                    <th>分</th>
+                    <th>分</th> 
                   </tr>
                 </thead>  
-                <tbody>
+                <tbody
+                  <% @attendance.each do |att_notice| %>
+                  <% if att_notice.user_id == user.id %>
                     <tr>
-                      <td><%= l(attendance.worked_on, format: :short) %></td>
-                      <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                      <td><%= l(att_notice.worked_on, format: :short) %></td>
+                      <td>
+                       <% $days_of_the_week[att_notice.worked_on.wday] %>
+                       <% if att_notice.worked_on.wday == 6 %>
+                       <font color="#00f"><%= $days_of_the_week[att_notice.worked_on.wday] %></font>
+                       <% elsif att_notice.worked_on.wday == 0 %>
+                       <font color="#f00"><%= $days_of_the_week[att_notice.worked_on.wday] %></font>
+                       <% else %>
+                       <font color="#000"><%= $days_of_the_week[att_notice.worked_on.wday] %></font>
+                       <% end %>
+                       </td>
                       <td><%#= l(day.work_end_time, format: :time_hour) %></td>
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
                       <td><%#= l(day.work_end_time, format: :time_hour) %></td>
@@ -51,14 +67,19 @@
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
                       <td><%#= l(day.work_end_time, format: :time_hour) %></td>
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
-                      <td><%= attendance.note %></td>
+                      <td><%= att_notice.note %></td>
                       <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
                       <td><%= f.check_box :change %></td>
-                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", check_show_user_path(att_notice.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
+                  <% end %>  
+                  <% end %>
                 </tbody>
               </table>
-                <% end %>
+            <% end %>  
+
+              
+                
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
             </div>

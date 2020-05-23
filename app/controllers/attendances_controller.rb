@@ -129,10 +129,11 @@ class AttendancesController < ApplicationController
   
   
   def change_of_attendance1
-    @attendance = Attendance.includes(:user).where(instructor:"3")
+    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"3"})
+    @attendance = Attendance.where(instructor:"3")
   end
   
-  def change_of_attendance1_request
+  def change_of_attendance1_request 
     
   end
   
@@ -168,7 +169,7 @@ class AttendancesController < ApplicationController
     end
      
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :instructor])[:attendances] 
+      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor])[:attendances] 
     end
 
 end
