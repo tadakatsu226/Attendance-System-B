@@ -10,14 +10,13 @@
     </div>
    
        <div class="modal-body">
-         
           <%= form_with(model: @attendance, url: update_overtime_request_superior4_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%#= render 'shared/error_messages', object: @user %>
-                <% @attendance.each do |attendance| %>
+                <% @users.each do |user| %>
               <table class="table table-bordered" id="table-attendances">
               
                 <thead>
-                  <p class="overtime-title">【<%=attendance.user.name %>からの残業申請】</p>
+                  <p class="overtime-title">【<%=user.name %>からの残業申請】</p>
                   <tr>
                     <th>日付</th>
                     <th>曜日</th>
@@ -32,10 +31,20 @@
                 </thead>  
            
                 <tbody>
-                   
+                  <% @attendance.each do |attendance| %>
+                   <% if attendance.user_id == user.id %>
                     <tr>
                       <td><%= l(attendance.worked_on, format: :short) %></td>
-                      <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                      <td>
+                        <% $days_of_the_week[attendance.worked_on.wday] %>
+                        <% if attendance.worked_on.wday == 6 %>
+                        <font color="#00f"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
+                        <% elsif attendance.worked_on.wday == 0 %>
+                        <font color="#f00"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
+                        <% else %>
+                        <font color="#000"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
+                        <% end %>
+                      </td>
                       <td><%= l attendance.work_end_time, format: :time %></td>
                       <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
                       <td><%= f.time_field :overtime, class: "form-control" %></td>
@@ -44,7 +53,8 @@
                       <td><%= f.check_box :change %></td>
                       <td><%= link_to "確認", check_show_user_path(attendance.user, date: attendance.worked_on), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
-                    
+                   <% end %>  
+                  <% end %>  
                 </tbody>
               </table>
                 <% end %>

@@ -59,11 +59,11 @@
                        <font color="#000"><%= $days_of_the_week[att_notice.worked_on.wday] %></font>
                        <% end %>
                        </td>
-                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
+                      <td><%= l(att_notice.started_at, format: :time_hour) if att_notice.started_at.present? %></td>
+                      <td><%= l(att_notice.started_at.floor_to(15.minutes),format: :time_minute) if att_notice.started_at.present? %></td>
+                      <td><%= l(att_notice.finished_at, format: :time_hour) if att_notice.finished_at.present? %></td>
+                      <td><%= l(att_notice.finished_at.floor_to(15.minutes),format: :time_minute) if att_notice.finished_at.present? %></td>
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
-                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
-                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
-                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
                       <td><%#= l(day.work_end_time, format: :time_hour) %></td>
                       <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>

@@ -95,7 +95,8 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request_superior3
-     @attendance = Attendance.includes(:user).where(instructor:"1")
+     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"1"})
+     @attendance = Attendance.where(instructor:"1")
   end
   
 
@@ -112,7 +113,8 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request_superior4
-     @attendance = Attendance.includes(:user).where(instructor:"2")
+     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"2"})
+     @attendance = Attendance.where(instructor:"2")
   end
   
   
