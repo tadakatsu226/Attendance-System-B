@@ -68,7 +68,7 @@ class AttendancesController < ApplicationController
           attendance.update_attributes!(item)
        end
     end
-    flash[:success] = "申請しました。"
+    flash[:success] = "勤怠の変更を申請しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
@@ -131,8 +131,8 @@ class AttendancesController < ApplicationController
   
   
   def change_of_attendance1
-    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"3"})
-    @attendance = Attendance.where(instructor:"3")
+    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"3"})
+    @attendance = Attendance.where(instructor1:"3")
   end
   
   def change_of_attendance1_request 
@@ -142,7 +142,8 @@ class AttendancesController < ApplicationController
   
 
   def change_of_attendance2
-    @attendance = Attendance.includes(:user).where(instructor:"4")
+    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"4"})
+    @attendance = Attendance.where(instructor1:"4")
   end
   
   def change_of_attendance2_request
@@ -167,11 +168,11 @@ class AttendancesController < ApplicationController
   private
   
     def attendance_params
-      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description, :request)
+      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description, :request, :request1)
     end
      
     def attendances_params
-      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor])[:attendances] 
+      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :instructor1])[:attendances] 
     end
 
 end

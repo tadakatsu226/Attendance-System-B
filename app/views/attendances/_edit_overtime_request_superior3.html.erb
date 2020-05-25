@@ -49,9 +49,9 @@
                       <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
                       <td><%= f.time_field :overtime, class: "form-control" %></td>
                       <td><%= attendance.job_description %></td>
-                      <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
+                      <td><%= f.select :request1, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]] %></td>
                       <td><%= f.check_box :change %></td>
-                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: attendance.worked_on), :target=>["_blank"], class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
                    <% end %>  
                   <% end %> 

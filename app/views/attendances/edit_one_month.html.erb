@@ -47,7 +47,15 @@
                  <% end %>
             </td>
             <td><%= attendance.text_field :note, class: "form-control" %></td>
-            <td><%= attendance.select :instructor,[[""],["上長1",3],["上長2",4]]%></td>
+            <td>
+              <% if current_user.superior1 %>
+                <%= attendance.select :instructor1,[[""],["上長2",4]]%>
+              <% elsif current_user.superior2 %>
+                <%= attendance.select :instructor1,[[""],["上長1",3]]%>     
+              <% else %>
+                <%= attendance.select :instructor1,[[""],["上長1",3],["上長2",4]]%>
+              <% end %>
+             </td>
           </tr>
          <% end %>
         <% end %>

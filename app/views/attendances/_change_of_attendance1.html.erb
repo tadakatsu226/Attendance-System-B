@@ -63,12 +63,12 @@
                       <td><%= l(att_notice.started_at.floor_to(15.minutes),format: :time_minute) if att_notice.started_at.present? %></td>
                       <td><%= l(att_notice.finished_at, format: :time_hour) if att_notice.finished_at.present? %></td>
                       <td><%= l(att_notice.finished_at.floor_to(15.minutes),format: :time_minute) if att_notice.finished_at.present? %></td>
-                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
-                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
-                      <td><%#= l(day.work_end_time, format: :time_hour) %></td>
-                      <td><%#= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) %></td>
+                      <td><%= l(att_notice.begintime_at, format: :time_hour) if att_notice.begintime_at.present? %></td>
+                      <td><%= l(att_notice.begintime_at.floor_to(15.minutes),format: :time_minute) if att_notice.begintime_at.present? %></td>
+                      <td><%= l(att_notice.endtime_at, format: :time_hour) if att_notice.endtime_at.present? %></td>
+                      <td><%= l(att_notice.endtime_at.floor_to(15.minutes),format: :time_minute) if att_notice.endtime_at.present? %></td>
                       <td><%= att_notice.note %></td>
-                      <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]]%></td>
+                      <td><%= f.select :request, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]] %></td>
                       <td><%= f.check_box :change %></td>
                       <td><%= link_to "確認", check_show_user_path(att_notice.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>

@@ -40,7 +40,15 @@
                     <td><%= f.time_field:work_end_time, class: "form-control" %></td>
                     <td><%= f.check_box :day_after %></td>
                     <td><%= f.text_field :job_description, :size=>"35" %></td>
-                    <td><%= f.select :instructor, [["選択してください"],["上長1",1],["上長2",2]]%></td>
+                    <td>
+                      <% if current_user.superior1 %>
+                      <%= f.select :instructor, [["選択してください"],["上長2",2]]%>
+                      <% elsif current_user.superior2 %>
+                      <%= f.select :instructor, [["選択してください"],["上長1",1]]%>
+                      <% else %>
+                      <%= f.select :instructor, [["選択してください"],["上長1",1],["上長2",2]]%>
+                      <% end %>
+                    </td>
                   </tr>
                 </tbody>
               </table>    
