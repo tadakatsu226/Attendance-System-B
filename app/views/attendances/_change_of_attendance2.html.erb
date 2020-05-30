@@ -13,7 +13,7 @@
     
      
        <div class="modal-body">
-          <%= form_with(model: @attendance, url: change_of_attendance2_request_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @attendance, url: update_change_of_attendance2_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
             
             
@@ -68,7 +68,7 @@
                       <td><%= l(att_notice.endtime_at, format: :time_hour) if att_notice.endtime_at.present? %></td>
                       <td><%= l(att_notice.endtime_at.floor_to(15.minutes),format: :time_minute) if att_notice.endtime_at.present? %></td>
                       <td><%= att_notice.note %></td>
-                      <td><%= f.select :request, [["選択してください"],["なし",5],["申請中",6],["承認",7],["否認",8]] %></td>
+                      <td><%= f.select :request, [["なし",15],["申請中",16],["承認",17],["否認",18]], {selected: 16}%></td>
                       <td><%= f.check_box :change %></td>
                       <td><%= link_to "確認", check_show_user_path(att_notice.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>

@@ -15,14 +15,25 @@ module AttendancesHelper
     format("%.2f", (((finish - start) / 60) / 60.0))
   end
   
-  def over_time(work_end_time, finish)
-    format("%.2f", ((( work_end_time -  finish ) / 60) / 60.0) )
+  def over_time(work_end_time, designation_duty_finish_time)
+    
+    # @user = User.find(params[:id])
+    # @attendance = Attendance.find(params[:id])
+    
+    # work_end = @user.designation_duty_finish_time.change(month: @attendance.worked_on.month, day: @attendance.worked_on.day)
+    # finish = @attendance.work_end_time.change(month: @attendance.worked_on.month, day: @attendance.worked_on.day)
+    
+    # unless day_after == true
+    format("%.2f", ((( work_end_time -  designation_duty_finish_time ) / 60) / 60.0) )
+    # else
+    # format("%.2f", ((( finish -  work_end ) / 60) / 60.0) + 24)
+    
+    # end
   end
   
   
   def request_count1
     Attendance.where(instructor:"1").count
-  
   end
   
   def request_count2

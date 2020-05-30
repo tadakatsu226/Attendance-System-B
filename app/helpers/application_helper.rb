@@ -9,4 +9,5 @@ module ApplicationHelper
             page_name + " | " + base_title
         end
     end
+    
 end

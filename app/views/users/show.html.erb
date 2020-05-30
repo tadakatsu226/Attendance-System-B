@@ -31,7 +31,11 @@
 
 <% if current_user.superior1 || current_user.superior2 %>
    <ul class="infomation">
-      <li><%=link_to "【所属長承認申請のお知らせ】", "#" , class: "apprication-info" %></li>
+      <% if current_user.superior1 && @attendance_request.where(instructor1: "3").count.present? && @attendance_request.where(instructor1: "3").count !=0 %>
+      <li><%=link_to "【所属長承認申請のお知らせ】", one_month_request_user_attendance_path(@user), remote: true , class: "apprication-info" %></li>
+      <% elsif current_user.superior1 && !current_user.superior2 %>
+      <p>【所属長承認申請のお知らせ@】</p>
+      <% end %>
       <!--<div class="box1">件の通知があります</div>-->
 
 
@@ -62,6 +66,7 @@
       <% end %>
       <% if current_user.superior1 && request_count1.present? && request_count1 != 0 %>
       <div class="box1"> <%= request_count1 %>件の通知があります</div>
+      <%# @attendance.request: "2" == instructor1: "1" %>
       <% end %></li>
       
 
@@ -83,7 +88,7 @@
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
   <%= link_to "CSV 出力", csv_output_user_attendance_path(@user.attendances, format: :csv), class: "btn btn-primary" %><br>
   <div class="col-md-2 col-xs-3">
-  <%= link_to "勤怠修正ログ (承認済)", "#" , class: "btn btn-block btn-primary" %>
+  <%= link_to "勤怠修正ログ (承認済)", designation_log_user_attendance_path(@user), class: "btn btn-block btn-primary" %>
   </div>
 </div>
 
@@ -160,7 +165,7 @@
           
           <td>
               <% if day.work_end_time.present? %>
-              <%= over_time(format_basic_info(@user.designation_duty_finish_time).to_datetime, (day.work_end_time).to_datetime) %> 
+              <%= overtime=over_time(day.work_end_time, format_basic_info(@user.designation_duty_finish_time).to_datetime) %>
               <% end %>
           </td>
           
@@ -289,7 +294,9 @@
             <% elsif day.request1 == "8" && day.request == "8" %> 
               <p>上長2: 残業否認</p>
               <p>上長2: 勤怠編集否認</p>
-
+              
+          
+              
             <% elsif day.instructor =="1" %>
               <p>上長1: 残業申請中</p>
             <% elsif day.instructor =="2" %>  
@@ -332,14 +339,14 @@
           <td><%= format("%.2f", @total_working_times.to_f) %></td>
           <td colspan="5"></td>
           <td>
-           所属長承認　未
+            所属長承認　未 
             <div class="dropdown">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">　　　　
               <span class="caret"></span>
               </button>
                 <div class="dropdown-menu">
-                  <li class= "dropdown-item"><%= link_to "上長A", current_user %></li>
-                  <li class= "dropdown-item"><%= link_to "上長B", current_user %></li>
+                  <li class= "dropdown-item"><%= link_to "上長1", current_user %></li>
+                  <li class= "dropdown-item"><%= link_to "上長2", current_user %></li>
                 </div>
             </div>
             <div class="Approval">
@@ -357,5 +364,5 @@
 <div id="edit-overtime-request-superior4" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="change-of-attendance1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="change-of-attendance2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-
+<div id="one-month-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 

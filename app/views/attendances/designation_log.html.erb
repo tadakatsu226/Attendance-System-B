@@ -1,0 +1,29 @@
+<h1>勤怠ログ（承認済）</h1>
+<%= link_to "検索", "#", class: "btn btn-md btn-primary" %>
+  <table class="table table-bordered" id="table-attendances">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>変更前出社時間</th>
+          <th>変更前退社時間</th>
+          <th>変更後出社時間</th>
+          <th>変更後退社時間</th>
+          <th>指示者</th>
+          <th>承認日</th>
+        </tr>
+      </thead> 
+      <tbody>
+           <% @attendance.each do |desig_log| %>
+        <tr>
+          　<td><%= l(desig_log.worked_on, format: :short) %></td>
+          　<td><%= l(desig_log.started_at, format: :time) if desig_log.started_at.present? %></td>
+          　<td><%= l(desig_log.finished_at, format: :time) if desig_log.finished_at.present? %></td>
+          　<td><%= l(desig_log.begintime_at,  format: :time) if desig_log.begintime_at.present? %></td>
+          　<td><%= l(desig_log.endtime_at,  format: :time) if desig_log.endtime_at.present? %></td>
+          　<td></td>
+          　<td></td>
+           
+        </tr>
+           <% end %>
+      </tbody>
+  </table>

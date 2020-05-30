@@ -1,10 +1,10 @@
 class AttendancesController < ApplicationController
   
   before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3, :edit_overtime_request_superior4, :change_of_attendance1,
-  :change_of_attendance2]
+  :change_of_attendance2, :designation_log, :one_month_request]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
-  before_action :set_one_month, only: [:csv_output, :edit_one_month]
+  before_action :set_one_month, only: [:csv_output, :edit_one_month, :one_month_request]
 
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
@@ -97,18 +97,23 @@ class AttendancesController < ApplicationController
   def edit_overtime_request_superior3
      @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"1"})
      @attendance = Attendance.where(instructor:"1")
+     
   end
   
 
   def update_overtime_request_superior3
-        attendance = Attendance.find(params[:id])
-   if attendance.change == "1" 
-     if @attendance.update(attendance_params)
-      flash[:success] = "勤怠の変更を確認しました。"
+  
+      @attendances = Attendance.where(instructor:"1")
+  # if @attendance.change == true
+     
+     if @attendances.update(attendances_params)
+      flash[:success] = "残業申請の変更をしました"
       redirect_to user_url(current_user)
-      
+     else
+      flash[:danger] = "変更にチェックを付けてください" 
+      redirect_to user_url(current_user)
      end
-   end
+  # end
   end
   
   
@@ -135,7 +140,7 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.where(instructor1:"3")
   end
   
-  def change_of_attendance1_request 
+  def update_change_of_attendance1
     
   end
   
@@ -146,7 +151,24 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.where(instructor1:"4")
   end
   
-  def change_of_attendance2_request
+  def update_change_of_attendance2
+    
+  end
+  
+  
+  def designation_log
+    @attendance = Attendance.where(instructor: "1").or(Attendance.where(instructor1: "3")).where(user_id: @user)
+  
+  end
+  
+  
+  
+  def one_month_request
+    
+  end
+  
+  
+  def update_one_month_request
     
   end
   
@@ -168,11 +190,21 @@ class AttendancesController < ApplicationController
   private
   
     def attendance_params
-      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description, :request, :request1)
+      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :instructor1, :job_description, :change, :request, :request1)
     end
+    
+    # def attendances_params
+    #   params.require(:attendance).permit(:work_end_time, :overtime, :job_description, :change, :request1)
+    # end
+    
+    
+    
+    
+    
      
     def attendances_params
       params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :instructor1])[:attendances] 
     end
 
 end
+

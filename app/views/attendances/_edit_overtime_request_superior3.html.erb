@@ -10,9 +10,10 @@
     </div>
    
        <div class="modal-body">
+         
           <%= form_with(model: @attendance, url: update_overtime_request_superior3_user_attendance_path(@user), local: true, method: :patch) do |f| %>
-            <%#= render 'shared/error_messages', object: @user %>
-                <% @users.each do |user| %>
+            <%= render 'shared/error_messages', object: @user %>
+               <% @users.each do |user| %> 
               <table class="table table-bordered" id="table-attendances">
               
                 <thead>
@@ -47,9 +48,9 @@
                       </td>
                       <td><%= l attendance.work_end_time, format: :time %></td>
                       <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
-                      <td><%= f.time_field :overtime, class: "form-control" %></td>
+                      <td><%= attendance.overtime %></td>
                       <td><%= attendance.job_description %></td>
-                      <td><%= f.select :request1, [["選択してください"],["なし",1],["申請中",2],["承認",3],["否認",4]] %></td>
+                      <td><%= f.select :request1, [["なし",1],["申請中",2],["承認",3],["否認",4]], {selected: 2} %></td>
                       <td><%= f.check_box :change %></td>
                       <td><%= link_to "確認", check_show_user_path(attendance.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
@@ -57,11 +58,11 @@
                   <% end %> 
                 </tbody>
               </table>
-                <% end %>
+              <% end %>
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-md btn-primary btn-#{yield(:class_text)}" %>
             </div>
-          <% end %>  
+          <% end %>
        </div>
   </div>
 </div>
