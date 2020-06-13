@@ -24,8 +24,8 @@ Rails.application.routes.draw do
       member do
         get 'edit_overtime_request'
         patch 'update_overtime_request'
-        get 'edit_overtime_request_superior3'
-        patch 'update_overtime_request_superior3' 
+        get 'edit_overtime_request_superior'
+        patch 'update_overtime_request_superior' 
         get 'edit_overtime_request_superior4'
         patch 'update_overtime_request_superior4' 
         get 'change_of_attendance1'

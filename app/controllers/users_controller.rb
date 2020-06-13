@@ -9,26 +9,19 @@ class UsersController < ApplicationController
 
 
   def index
-    # @users = User.paginate(page: params[:page]).search(params[:search])
     @users = User.all
     # @users = User.where.not(id: 1).all
   end
 
   def show
-    @attendance_request = Attendance.all
-    
-   @worked_sum = @attendances.where.not(started_at: nil).count
-   
+    @worked_sum = @attendances.where.not(started_at: nil).count
+    @request_count3 = Attendance.where(instructor: @user.id).count
   end
+  
   
   def check_show
-    
-    
+
   end
-  
-  
-  
-  
   
 
   def new

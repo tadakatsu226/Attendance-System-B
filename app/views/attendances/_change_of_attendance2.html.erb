@@ -68,7 +68,7 @@
                       <td><%= l(att_notice.endtime_at, format: :time_hour) if att_notice.endtime_at.present? %></td>
                       <td><%= l(att_notice.endtime_at.floor_to(15.minutes),format: :time_minute) if att_notice.endtime_at.present? %></td>
                       <td><%= att_notice.note %></td>
-                      <td><%= f.select :request, [["なし",15],["申請中",16],["承認",17],["否認",18]], {selected: 16}%></td>
+                      <td><%= f.select :request, [["なし",13],["申請中",14],["承認",15],["否認",16]], {selected: 14}%></td>
                       <td><%= f.check_box :change %></td>
                       <td><%= link_to "確認", check_show_user_path(att_notice.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>

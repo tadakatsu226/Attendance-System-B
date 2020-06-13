@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200524162842) do
+ActiveRecord::Schema.define(version: 20200613113613) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -34,6 +34,13 @@ ActiveRecord::Schema.define(version: 20200524162842) do
     t.datetime "endtime_at"
     t.text "instructor1"
     t.text "request1"
+    t.text "remember"
+    t.string "overtime_status"
+    t.string "edit_status"
+    t.string "month_req_status"
+    t.string "overtime_authorizer"
+    t.string "edit_authorizer"
+    t.string "month_req_authorizer"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -54,14 +61,13 @@ ActiveRecord::Schema.define(version: 20200524162842) do
     t.string "department"
     t.string "remember_digest"
     t.boolean "admin", default: false
-    t.datetime "basic_time", default: "2020-05-06 23:00:00"
-    t.datetime "work_time", default: "2020-05-06 22:30:00"
-    t.datetime "designation_duty_start_time", default: "2020-05-06 23:00:00"
-    t.datetime "designation_duty_finish_time", default: "2020-05-07 08:00:00"
+    t.datetime "basic_time", default: "2020-06-12 23:00:00"
+    t.datetime "work_time", default: "2020-06-12 22:30:00"
+    t.datetime "designation_duty_start_time", default: "2020-06-12 23:00:00"
+    t.datetime "designation_duty_finish_time", default: "2020-06-13 08:00:00"
     t.string "employee_number"
     t.string "card_id"
-    t.boolean "superior1", default: false
-    t.boolean "superior2", default: false
+    t.boolean "superior", default: false
     t.string "affiliation"
     t.string "uid"
     t.string "basic_work_time"

@@ -10,12 +10,11 @@
     </div>
    
        <div class="modal-body">
-         
-          <%= form_with(model: @attendance, url: update_overtime_request_superior3_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @attendance, url: update_overtime_request_superior_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
                <% @users.each do |user| %> 
+
               <table class="table table-bordered" id="table-attendances">
-              
                 <thead>
                   <p class="overtime-title">【<%=user.name %>からの残業申請】</p>
                   <tr>
@@ -28,34 +27,43 @@
                     <th>指示者確認㊞</th>
                     <th>変更</th>
                     <th>勤怠を確認する</th>
-                  </tr>
+                  </tr
                 </thead>  
            
                 <tbody>
-                  <% @attendance.each do |attendance| %>
-                   <% if attendance.user_id == user.id %>
+                  
+                  <% @attendance.each do |att| %>
+                  
+                  <%= f.fields_for "attendance[]", att do |i| %> 
+                    
+                 <%= i.hidden_field :id, :value => att.id %> <!-- attendancesテーブルのidを渡す -->
+                 <%= i.hidden_field :user_id, :value => user.id %>
+                 
+
+                   <% if att.user_id == user.id %> 
                     <tr>
-                      <td><%= l(attendance.worked_on, format: :short) %></td>
+                      <td><%= l(att.worked_on, format: :short) %></td>
                       <td>
-                        <% $days_of_the_week[attendance.worked_on.wday] %>
-                        <% if attendance.worked_on.wday == 6 %>
-                        <font color="#00f"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
-                        <% elsif attendance.worked_on.wday == 0 %>
-                        <font color="#f00"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
+                        <% $days_of_the_week[att.worked_on.wday] %>
+                        <% if att.worked_on.wday == 6 %>
+                        <font color="#00f"><%= $days_of_the_week[att.worked_on.wday] %></font>
+                        <% elsif att.worked_on.wday == 0 %>
+                        <font color="#f00"><%= $days_of_the_week[att.worked_on.wday] %></font>
                         <% else %>
-                        <font color="#000"><%= $days_of_the_week[attendance.worked_on.wday] %></font>
+                        <font color="#000"><%= $days_of_the_week[att.worked_on.wday] %></font>
                         <% end %>
                       </td>
-                      <td><%= l attendance.work_end_time, format: :time %></td>
+                      <td><%= l att.work_end_time, format: :time %></td>
                       <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
-                      <td><%= attendance.overtime %></td>
-                      <td><%= attendance.job_description %></td>
-                      <td><%= f.select :request1, [["なし",1],["申請中",2],["承認",3],["否認",4]], {selected: 2} %></td>
-                      <td><%= f.check_box :change %></td>
-                      <td><%= link_to "確認", check_show_user_path(attendance.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
+                      <td><%= att.overtime %></td>
+                      <td><%= att.job_description %></td>
+                      <td><%= i.select :overtime_status, [["なし",1],["申請中",2],["承認",3],["否認",4]] %></td>
+                      <td><%= i.check_box :remember, {}, "true", "false" %></td>
+                      <td><%= link_to "確認", check_show_user_path(att.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
                    <% end %>  
                   <% end %> 
+                 <% end %>
                 </tbody>
               </table>
               <% end %>

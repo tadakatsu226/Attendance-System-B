@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :edit_overtime_request_superior3, :edit_overtime_request_superior4, :change_of_attendance1,
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1,
   :change_of_attendance2, :designation_log, :one_month_request]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
@@ -11,16 +11,14 @@ class AttendancesController < ApplicationController
 
   def new
     @attendance = Attendance.find(params[:id])
-  
-    # @user = User.find(params[:id])
   end
-    
-  
+
   def create
-    # @attendance = Attendance.new(attendance_params)
-    # @attendance.user_id = current_user.id
-    # @attendance.save
-    # redirect_to show
+    
+  end
+  
+  def show
+    
   end
   
   def csv_output
@@ -39,7 +37,6 @@ class AttendancesController < ApplicationController
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    
     if @attendance.started_at.nil?
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
         flash[:info] = "おはようございます！"
@@ -77,10 +74,10 @@ class AttendancesController < ApplicationController
   
   
   def edit_overtime_request
+      @user = User.find(params[:user_id])
       @attendance = Attendance.find(params[:id])
-  
-    # @day=Date.parse(params[:day])s
-    # @user=User.find(params[:id])
+      @instructor = User.where(superior: true).where.not(id: @user.id)
+      @overtime_status = "申請中"
   end
   
   
@@ -90,50 +87,36 @@ class AttendancesController < ApplicationController
       flash[:success] = "残業を申請しました。"
       redirect_to user_url(current_user)
     else
+      flash[:danger] = "残業申請に失敗しました"
+      redirect_to user_url(current_user)
     end
   end
   
   
-  def edit_overtime_request_superior3
-     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"1"})
-     @attendance = Attendance.where(instructor:"1")
-     
+  def edit_overtime_request_superior
+     @user = User.find(params[:user_id])
+     @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中"})
+    # @attendance = Attendance.where(instructor:"1")
   end
   
 
-  def update_overtime_request_superior3
-  
-      @attendances = Attendance.where(instructor:"1")
-  # if @attendance.change == true
+  def update_overtime_request_superior
+      @user = User.find(params[:user_id])
+      @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"1"})
      
-     if @attendances.update(attendances_params)
-      flash[:success] = "残業申請の変更をしました"
-      redirect_to user_url(current_user)
-     else
-      flash[:danger] = "変更にチェックを付けてください" 
-      redirect_to user_url(current_user)
-     end
-  # end
+      users_params.each do |id, item|
+         @attendance = Attendance.find(id)
+         if item[:remember] == "true"
+        　@attendance.update(users_params)
+          flash[:success] = "残業申請の変更をしました"
+          redirect_to user_url(current_user)
+         else
+          flash[:danger] = "変更にチェックを付けてください" 
+          redirect_to user_url(current_user)
+         end
+      end
   end
-  
-  
-  def edit_overtime_request_superior4
-     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor:"2"})
-     @attendance = Attendance.where(instructor:"2")
-  end
-  
-  
-  def update_overtime_request_superior4
-         attendance = Attendance.find(params[:id])
-   if attendance.change == "1" 
-     if @attendance.update(attendance_params)
-      flash[:success] = "勤怠の変更を確認しました。"
-      redirect_to user_url(current_user)
-      
-     end
-   end
-  end
-  
+
   
   def change_of_attendance1
     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"3"})
@@ -143,8 +126,7 @@ class AttendancesController < ApplicationController
   def update_change_of_attendance1
     
   end
-  
-  
+
 
   def change_of_attendance2
     @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"4"})
@@ -172,10 +154,7 @@ class AttendancesController < ApplicationController
     
   end
   
-  
 
-  
-  
   def admin_or_correct_user
     @user = User.find(params[:user_id]) if @user.blank?
       unless current_user?(@user) || current_user.admin?
@@ -184,24 +163,17 @@ class AttendancesController < ApplicationController
       end
   end
   
-  
-
 
   private
   
     def attendance_params
-      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :instructor1, :job_description, :change, :request, :request1)
+      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description)
     end
     
-    # def attendances_params
-    #   params.require(:attendance).permit(:work_end_time, :overtime, :job_description, :change, :request1)
-    # end
+    def users_params
+      params.require(:attendance).permit(attendance: [:over_time, :job_description, :remember, :request1])[:attendance]
+    end
     
-    
-    
-    
-    
-     
     def attendances_params
       params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :instructor1])[:attendances] 
     end
