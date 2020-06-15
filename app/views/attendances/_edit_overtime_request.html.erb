@@ -31,14 +31,13 @@
                       <% $days_of_the_week[@attendance.worked_on.wday] %>
                       <% if @attendance.worked_on.wday == 6 %>
                        <font color="#00f"><%= $days_of_the_week[@attendance.worked_on.wday] %></font>
-                       <% elsif @attendance.worked_on.wday == 0 %>
+                      <% elsif @attendance.worked_on.wday == 0 %>
                        <font color="#f00"><%= $days_of_the_week[@attendance.worked_on.wday] %></font>
-                       <% else %>
+                      <% else %>
                        <font color="#000"><%= $days_of_the_week[@attendance.worked_on.wday] %></font>
-                       <% end %>
+                      <% end %>
                     </td>
-                    <td><%= f.time_field:work_end_time, class: "form-control" %>
-                    </td>
+                    <td><%= f.time_field:work_end_time, class: "form-control" %></td>
                     <td><%= f.check_box :day_after %></td>
                     <td><%= f.text_field :job_description, :size=>"35" %></td>
                     <td><%= f.select :instructor, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %>

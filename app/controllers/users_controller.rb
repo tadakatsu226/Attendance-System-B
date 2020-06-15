@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
-    @request_count3 = Attendance.where(instructor: @user.id).count
+    @request_count3 = Attendance.where(instructor: @user.id, overtime_status: "申請中").count
   end
   
   
@@ -71,21 +71,7 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
-  
-  
-  
-  
-  # def edit_overtime_request
-  #   # @day = Date.parse(params[:day]) 
-  #   # @attendance = Attendance.find(params[:id])
-  #   # @user = User.find(params[:id])
-  # end
-  
-  # def update_overtime_request_superior1
-    
-  # end
-  
-  
+
   def going_to_work
     #   @attnedances = Attendance.find(params[:id]) 
     # @user = @attendances.user_id
@@ -98,9 +84,7 @@ class UsersController < ApplicationController
     # end
   end
   
-  
-  
-  
+
   def import
     if params[:file].blank?
       redirect_to users_url  
@@ -114,14 +98,13 @@ class UsersController < ApplicationController
   
 
   
-  
-    def admin_or_correct_user
-      @user = User.find(params[:user_id]) if @user.blank?
-      unless current_user?(@user) || current_user.admin?
-        flash[:danger] = "編集権限がありません。"
-        redirect_to(root_url)
-      end  
-    end
+  def admin_or_correct_user
+    @user = User.find(params[:user_id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "編集権限がありません。"
+      redirect_to(root_url)
+    end  
+  end
 
 
   private
