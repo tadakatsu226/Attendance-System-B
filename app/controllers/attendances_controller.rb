@@ -1,7 +1,6 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1,
-  :change_of_attendance2, :designation_log, :one_month_request]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1, :change_of_attendance2, :designation_log, :one_month_request]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
   before_action :set_one_month, only: [:csv_output, :edit_one_month, :one_month_request]
@@ -57,13 +56,16 @@ class AttendancesController < ApplicationController
      @instructor = User.where(superior: true).where.not(id: @user.id)
   end
   
-  
+  # 勤怠を編集
   def update_one_month
-     ActiveRecord::Base.transaction do 
-       attendances_params.each do |id, item|
-          attendance = Attendance.find(id)
-          attendance.update_attributes!(item)
-       end
+    ActiveRecord::Base.transaction do
+      attendances_params.each do |id, item|
+        attendance = Attendance.find(id)
+        if attendance.begintime_at && attendance.endtime_at && attendance.note && attendance.instructor != nil
+            attendance.edit_status = "申請中"
+        end
+        attendance.update_attributes!(item)
+      end
     end
     flash[:success] = "勤怠の変更を申請しました。"
     redirect_to user_url(date: params[:date])
@@ -92,14 +94,14 @@ class AttendancesController < ApplicationController
     end
   end
   
-  
+  # 上長への残業申請のお知らせモーダル表示
   def edit_overtime_request_superior
      @user = User.find(params[:user_id])
      @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",instructor: @user.id})
      @attendance = Attendance.where(instructor: @user.id, overtime_status: "申請中")
   end
   
-
+  # 残業申請による上長からの承認または否認の返信
   def update_overtime_request_superior
     @user = User.find(params[:user_id])
     @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",instructor: @user.id})
@@ -113,28 +115,29 @@ class AttendancesController < ApplicationController
     redirect_to user_url(current_user)
   end
 
-  
+  # 上長への勤怠変更申請モーダル表示
   def change_of_attendance1
-    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"3"})
-    @attendance = Attendance.where(instructor1:"3")
+    @user = User.find(params[:user_id])
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",instructor: @user.id})
+    @attendance = Attendance.where(instructor: @user.id, edit_status: "申請中")
   end
   
+  # 勤怠変更申請による上長からの承認または否認の返信
   def update_change_of_attendance1
-    
+    @user = User.find(params[:user_id])
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",instructor: @user.id})
+    # @attendance = Attendance.where(instructor: @user.id, edit_status: "申請中")
+    change_params.each do |id, item|
+      @attendance = Attendance.find(id)
+      if item[:confirmed] == "true"
+        @attendance.update(item)
+      end
+    end
+    flash[:success] = "勤怠編集の変更をしました"
+    redirect_to user_url(current_user)
   end
 
 
-  def change_of_attendance2
-    @users = User.joins(:attendances).group("users.id").where(attendances: {instructor1:"4"})
-    @attendance = Attendance.where(instructor1:"4")
-  end
-  
-  
-  def update_change_of_attendance2
-    
-  end
-  
-  
   def designation_log
     @attendance = Attendance.where(instructor: "1").or(Attendance.where(instructor1: "3")).where(user_id: @user)
   
@@ -171,7 +174,11 @@ class AttendancesController < ApplicationController
     end
     
     def attendances_params
-      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :instructor1])[:attendances] 
+      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :tomorrow, :edit_status])[:attendances] 
+    end
+    
+    def change_params
+      params.require(:attendance).permit(attendance: [:edit_status, :confirmed])[:attendance]
     end
 end
 

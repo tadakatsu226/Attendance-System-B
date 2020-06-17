@@ -21,7 +21,6 @@
          <%= f.fields_for "attendances[]", day do |attendance| %>
           <tr>
             <td><%= l(day.worked_on, format: :short) %></td>
-            
             <td>
                 <% if day.worked_on.wday == 6 %>
                 <font color="#00f"><%= $days_of_the_week[day.worked_on.wday] %></font>
@@ -31,7 +30,6 @@
                 <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
                 <% end %>
             </td>
-            
             <% if Date.current < day.worked_on %>
               <td><%= attendance.time_field :begintime_at, readonly: true, class: "form-control" %></td>
               <td><%= attendance.time_field :endtime_at, readonly: true, class: "form-control" %></td>
@@ -39,7 +37,7 @@
               <td><%= attendance.time_field :begintime_at, class: "form-control" %></td>
               <td><%= attendance.time_field :endtime_at, class: "form-control" %></td>
             <% end %>
-            <td><%= f.check_box :tomorow,{class: 'chk'} %></td>
+            <td><%= f.check_box :tomorrow,{class: 'chk'} %></td>
             <td>
                  <% if day.begintime_at.present? && day.endtime_at.present? %>
                  <%= working_times(day.begintime_at, day.endtime_at) %>

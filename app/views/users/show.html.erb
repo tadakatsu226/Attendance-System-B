@@ -135,12 +135,19 @@
             <% if day.overtime_status == "申請中" %> 
               <% instructor = User.find(day.instructor) %>
               <p><%= instructor.name %>へ残業申請中</p>
-              <%# elsif day.overtime_status == "承認" %>
-              <!--<p>残業承認</p>-->
-              <%# elsif day.overtime_status == "否認" %>
-              <!--<p>残業否認</p>-->
+            <% elsif day.overtime_status == "承認" %>
+              <p>残業申請承認</p>
+            <% elsif day.overtime_status == "否認" %>
+              <p>残業申請否認</p>
             <% end %>
-
+            <% if day.edit_status == "申請中" %>
+              <% instructor = User.find(day.instructor) %>
+              <p><%= instructor.name %>へ勤怠申請中</p>
+            <% elsif day.edit_status == "承認" %>
+              <p>勤怠編集承認</p>
+            <% elsif day.edit_status == "否認" %>
+              <p>勤怠編集否認</p>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -177,6 +184,5 @@
 <div id="edit-overtime-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="edit-overtime-request-superior" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="change-of-attendance1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="change-of-attendance2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="one-month-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
