@@ -40,7 +40,7 @@
             <td><%= attendance.check_box :tomorrow, {}, "true", "false" %></td>
             <td>
                  <% if day.begintime_at.present? && day.endtime_at.present? %>
-                 <%= working_times(day.begintime_at, day.endtime_at, day.worked_on) %>
+                 <%= worktimes(day.begintime_at, day.endtime_at, day.worked_on) %>
                  <% end %>
             </td>
             <td><%= attendance.text_field :note, class: "form-control" %></td>

@@ -61,10 +61,15 @@ class AttendancesController < ApplicationController
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
-        if attendance.begintime_at && attendance.endtime_at && attendance.note && attendance.instructor != nil
+        if item[:edit_authorizer].present?
+          if item[:begintime_at].present? && item[:endtime_at].present? && item[:note].present? 
             attendance.edit_status = "申請中"
+            attendance.update_attributes!(item)
+          else
+            flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+            redirect_to attendances_edit_one_month_user_url(date: params[:date])
+          end
         end
-        attendance.update_attributes!(item)
       end
     end
     flash[:success] = "勤怠の変更を申請しました。"
@@ -104,7 +109,7 @@ class AttendancesController < ApplicationController
   # 残業申請による上長からの承認または否認の返信
   def update_overtime_request_superior
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",overtime_authorizer: @user.id})
+    @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中", overtime_authorizer: @user.id})
     users_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:remember] == "true"
@@ -118,15 +123,15 @@ class AttendancesController < ApplicationController
   # 上長への勤怠変更申請モーダル表示
   def change_of_attendance1
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",edit_authorizer: @user.id})
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
     @attendance = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中")
-    
+
   end
   
   # 勤怠変更申請による上長からの承認または否認の返信
   def update_change_of_attendance1
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",edit_authorizer: @user.id})
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
     change_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:confirmed] == "true"

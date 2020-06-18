@@ -11,7 +11,12 @@ module AttendancesHelper
   end
   
   
-  def working_times(start, finish, worked_on)
+  def working_times(start, finish)
+    format("%.2f", (((finish - start) / 60) / 60.0))
+  end
+  
+  
+  def worktimes(start, finish, worked_on)
     @user = User.find(params[:id])
     @attendance = @user.attendances.find_by(worked_on: worked_on)
     if @attendance.tomorrow == "false"

@@ -142,7 +142,7 @@
           </td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.worked_on) %>
+              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
@@ -157,16 +157,16 @@
           <td><%= day.job_description %></td>
           <td style="width: 15%">
             <% if day.overtime_status == "申請中" %> 
-              <%# instructor = User.find(day.instructor) %>
-              <p><%#= instructor.name %>へ残業申請中</p>
+              <% instructor = User.find(day.overtime_authorizer) %>
+              <p><%= instructor.name %>へ残業申請中</p>
             <% elsif day.overtime_status == "承認" %>
               <p>残業申請承認</p>
             <% elsif day.overtime_status == "否認" %>
               <p>残業申請否認</p>
             <% end %>
             <% if day.edit_status == "申請中" %>
-              <%# instructor = User.find(day.instructor) %>
-              <p><%#= instructor.name %>へ勤怠申請中</p>
+              <% instructor = User.find(day.edit_authorizer) %>
+              <p><%= instructor.name %>へ勤怠申請中</p>
             <% elsif day.edit_status == "承認" %>
               <p>勤怠編集承認</p>
             <% elsif day.edit_status == "否認" %>
