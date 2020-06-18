@@ -40,7 +40,7 @@
                     <td><%= f.time_field:work_end_time, class: "form-control" %></td>
                     <td><%= f.check_box :day_after %></td>
                     <td><%= f.text_field :job_description, :size=>"35" %></td>
-                    <td><%= f.select :instructor, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %></td>
+                    <td><%= f.select :overtime_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %></td>
                   </tr>
                 </tbody>
               </table>    

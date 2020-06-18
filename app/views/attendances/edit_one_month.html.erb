@@ -37,14 +37,14 @@
               <td><%= attendance.time_field :begintime_at, class: "form-control" %></td>
               <td><%= attendance.time_field :endtime_at, class: "form-control" %></td>
             <% end %>
-            <td><%= f.check_box :tomorrow,{class: 'chk'} %></td>
+            <td><%= attendance.check_box :tomorrow, {}, "true", "false" %></td>
             <td>
                  <% if day.begintime_at.present? && day.endtime_at.present? %>
-                 <%= working_times(day.begintime_at, day.endtime_at) %>
+                 <%= working_times(day.begintime_at, day.endtime_at, day.worked_on) %>
                  <% end %>
             </td>
             <td><%= attendance.text_field :note, class: "form-control" %></td>
-            <td><%= f.select :instructor, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %></td>
+            <td><%= attendance.select :edit_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %></td>
           </tr>
          <% end %>
         <% end %>

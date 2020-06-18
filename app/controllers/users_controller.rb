@@ -15,9 +15,9 @@ class UsersController < ApplicationController
 
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
-    @request_count1 = Attendance.where(instructor: @user.id, month_req_status: "申請中").count
-    @request_count2 = Attendance.where(instructor: @user.id, edit_status: "申請中").count
-    @request_count3 = Attendance.where(instructor: @user.id, overtime_status: "申請中").count
+    # @request_count1 = Attendance.where(mon_req_authorizer: @user.id, month_req_status: "申請中").count
+    @request_count2 = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中").count
+    @request_count3 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "申請中").count
   end
   
   

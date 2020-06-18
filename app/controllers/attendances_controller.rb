@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1, :change_of_attendance2, :designation_log, :one_month_request]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1, :designation_log, :one_month_request]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
   before_action :set_one_month, only: [:csv_output, :edit_one_month, :one_month_request]
@@ -97,14 +97,14 @@ class AttendancesController < ApplicationController
   # 上長への残業申請のお知らせモーダル表示
   def edit_overtime_request_superior
      @user = User.find(params[:user_id])
-     @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",instructor: @user.id})
-     @attendance = Attendance.where(instructor: @user.id, overtime_status: "申請中")
+     @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中", overtime_authorizer: @user.id})
+     @attendance = Attendance.where(overtime_authorizer: @user.id, overtime_status: "申請中")
   end
   
   # 残業申請による上長からの承認または否認の返信
   def update_overtime_request_superior
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",instructor: @user.id})
+    @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中",overtime_authorizer: @user.id})
     users_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:remember] == "true"
@@ -118,15 +118,15 @@ class AttendancesController < ApplicationController
   # 上長への勤怠変更申請モーダル表示
   def change_of_attendance1
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",instructor: @user.id})
-    @attendance = Attendance.where(instructor: @user.id, edit_status: "申請中")
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",edit_authorizer: @user.id})
+    @attendance = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中")
+    
   end
   
   # 勤怠変更申請による上長からの承認または否認の返信
   def update_change_of_attendance1
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",instructor: @user.id})
-    # @attendance = Attendance.where(instructor: @user.id, edit_status: "申請中")
+    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中",edit_authorizer: @user.id})
     change_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:confirmed] == "true"
@@ -166,7 +166,7 @@ class AttendancesController < ApplicationController
   private
   
     def attendance_params
-      params.require(:attendance).permit(:work_end_time, :day_after, :instructor, :job_description)
+      params.require(:attendance).permit(:work_end_time, :day_after, :overtime_authorizer, :job_description)
     end
     
     def users_params
@@ -174,7 +174,7 @@ class AttendancesController < ApplicationController
     end
     
     def attendances_params
-      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :instructor, :tomorrow, :edit_status])[:attendances] 
+      params.require(:user).permit(attendances: [:begintime_at, :endtime_at, :note, :edit_authorizer, :edit_status, :tomorrow])[:attendances] 
     end
     
     def change_params

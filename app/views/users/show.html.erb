@@ -98,27 +98,51 @@
           <td><%= link_to "残業申請", edit_overtime_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>   
           <td>
-             <% $days_of_the_week[day.worked_on.wday] %>
-             <% if day.worked_on.wday == 6 %>
-             <font color="#00f"><%= $days_of_the_week[day.worked_on.wday] %></font>
-             <% elsif day.worked_on.wday == 0 %>
-             <font color="#f00"><%= $days_of_the_week[day.worked_on.wday] %></font>
-             <% else %>
-             <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
-             <% end %>
+            <% $days_of_the_week[day.worked_on.wday] %>
+            <% if day.worked_on.wday == 6 %>
+            <font color="#00f"><%= $days_of_the_week[day.worked_on.wday] %></font>
+            <% elsif day.worked_on.wday == 0 %>
+            <font color="#f00"><%= $days_of_the_week[day.worked_on.wday] %></font>
+            <% else %>
+            <font color="#000"><%= $days_of_the_week[day.worked_on.wday] %></font>
+            <% end %>
           </td>    
-          <td><%= l(day.started_at, format: :time_hour) if day.started_at.present? %></td>
-          <td><%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %></td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.begintime_at, format: :time_hour) if day.begintime_at.present? %>
+            <% else %>
+            <%= l(day.started_at, format: :time_hour) if day.started_at.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.begintime_at.floor_to(15.minutes),format: :time_minute) if day.begintime_at.present? %>
+            <% else %>
+            <%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %>
+            <% end %>
+          </td>
           <td style="width: 10%" "height: 10%">
           　<% if btn_text = attendance_state(day) %>
           　<%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-block btn-sm btn-primary btn-attendance" %>
    　　　  　　 <% end %>
           </td>
-          <td><%= l(day.finished_at, format: :time_hour) if day.finished_at.present? %></td>
-          <td><%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %></td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.endtime_at, format: :time_hour) if day.endtime_at.present? %>
+            <% else %>
+            <%= l(day.finished_at, format: :time_hour) if day.finished_at.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.endtime_at.floor_to(15.minutes),format: :time_minute) if day.endtime_at.present? %>
+            <% else %>
+            <%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %>
+            <% end %>
+          </td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
+              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.worked_on) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
@@ -133,16 +157,16 @@
           <td><%= day.job_description %></td>
           <td style="width: 15%">
             <% if day.overtime_status == "申請中" %> 
-              <% instructor = User.find(day.instructor) %>
-              <p><%= instructor.name %>へ残業申請中</p>
+              <%# instructor = User.find(day.instructor) %>
+              <p><%#= instructor.name %>へ残業申請中</p>
             <% elsif day.overtime_status == "承認" %>
               <p>残業申請承認</p>
             <% elsif day.overtime_status == "否認" %>
               <p>残業申請否認</p>
             <% end %>
             <% if day.edit_status == "申請中" %>
-              <% instructor = User.find(day.instructor) %>
-              <p><%= instructor.name %>へ勤怠申請中</p>
+              <%# instructor = User.find(day.instructor) %>
+              <p><%#= instructor.name %>へ勤怠申請中</p>
             <% elsif day.edit_status == "承認" %>
               <p>勤怠編集承認</p>
             <% elsif day.edit_status == "否認" %>
@@ -162,15 +186,16 @@
           <td colspan="5"></td>
           <td>
             所属長承認　未 
-            <div class="dropdown">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">　　　　
-              <span class="caret"></span>
-              </button>
-                <div class="dropdown-menu">
-                  <li class= "dropdown-item"><%= link_to "上長1", current_user %></li>
-                  <li class= "dropdown-item"><%= link_to "上長2", current_user %></li>
-                </div>
-            </div>
+            <%#= select :instructor, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %>
+            <!--<div class="dropdown">-->
+            <!--  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">　　　　-->
+            <!--  <span class="caret"></span>-->
+            <!--  </button>-->
+            <!--    <div class="dropdown-menu">-->
+            <!--      <li class= "dropdown-item"><%#= link_to "上長1", current_user %></li>-->
+            <!--      <li class= "dropdown-item"><%#= link_to "上長2", current_user %></li>-->
+            <!--    </div>-->
+            <!--</div>-->
             <div class="Approval">
             <%= link_to "承認", "#", class: "btn btn-block btn-primary" %>
             </div>
