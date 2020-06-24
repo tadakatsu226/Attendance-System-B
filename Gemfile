@@ -17,6 +17,7 @@ gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
 gem 'pry-rails'
 gem 'roo'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'sqlite3'

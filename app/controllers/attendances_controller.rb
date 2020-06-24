@@ -65,6 +65,8 @@ class AttendancesController < ApplicationController
           if item[:begintime_at].present? && item[:endtime_at].present? && item[:note].present? 
             attendance.edit_status = "申請中"
             attendance.update_attributes!(item)
+            flash[:success] = "勤怠の変更を申請しました。"
+             redirect_to user_url(date: params[:date])and return
           else
             flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
             redirect_to attendances_edit_one_month_user_url(date: params[:date])
@@ -72,8 +74,6 @@ class AttendancesController < ApplicationController
         end
       end
     end
-    flash[:success] = "勤怠の変更を申請しました。"
-    redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
@@ -103,7 +103,7 @@ class AttendancesController < ApplicationController
   def edit_overtime_request_superior
      @user = User.find(params[:user_id])
      @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中", overtime_authorizer: @user.id})
-     @attendance = Attendance.where(overtime_authorizer: @user.id, overtime_status: "申請中")
+     @attendances = Attendance.where(overtime_authorizer: @user.id, overtime_status: "申請中")
   end
   
   # 残業申請による上長からの承認または否認の返信
@@ -124,15 +124,15 @@ class AttendancesController < ApplicationController
   def change_of_attendance1
     @user = User.find(params[:user_id])
     @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
-    @attendance = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中")
+    @attendances = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中")
 
   end
   
   # 勤怠変更申請による上長からの承認または否認の返信
   def update_change_of_attendance1
     @user = User.find(params[:user_id])
-    @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
-    change_params.each do |id, item|
+    # @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
+      change_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:confirmed] == "true"
         @attendance.update(item)
@@ -142,29 +142,34 @@ class AttendancesController < ApplicationController
     redirect_to user_url(current_user)
   end
 
+  # 一ヶ月分の勤怠申請モーダル
+  def edit_one_month_request
+    @user = User.find(params[:user_id])
+    @users = User.joins(:attendances).group("users.id").where(attendances: {month_req_status: "申請中", month_req_authorizer: @user.id})
+    @attendances = Attendance.where(month_req_authorizer: @user.id, month_req_status: "申請中")
 
-  def designation_log
-    @attendance = Attendance.where(instructor: "1").or(Attendance.where(instructor1: "3")).where(user_id: @user)
-  
   end
   
-
-  def one_month_request
-    
-  end
-  
-  
+  # 一ヶ月分の勤怠申請の承認または否認
   def update_one_month_request
-    
+    @user = User.find(params[:user_id])
+    # @users = User.joins(:attendances).group("users.id").where(attendances: {month_req_status: "申請中", month_req_authorizer: @user.id})
+    # @attendances = Attendance.where(month_req_authorizer: @user.id, month_req_status: "申請中")
+    one_month_request_params.each do |id, item|
+      @attendance = Attendance.find(id)
+      if item[:verify] == "true"
+        @attendance.update(item)
+      end
+    end
+      flash[:success] = "１ヶ月の申請の変更をしました"
+      redirect_to user_url(current_user)
   end
   
-
-  def admin_or_correct_user
-    @user = User.find(params[:user_id]) if @user.blank?
-      unless current_user?(@user) || current_user.admin?
-        flash[:danger] = "編集権限がありません。"
-        redirect_to(root_url)
-      end
+  
+  def designation_log
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.where(overtime_status: "承認").or(@user.attendances.where(edit_status: "承認"))
+  
   end
 
 
@@ -183,7 +188,21 @@ class AttendancesController < ApplicationController
     end
     
     def change_params
-      params.require(:attendance).permit(attendance: [:edit_status, :confirmed])[:attendance]
+      params.require(:user).permit(attendances: [:edit_status, :confirmed])[:attendances]
+      
     end
+    
+    def one_month_request_params
+      params.require(:user).permit(attendances: [:verify, :month_req_status])[:attendances]
+    end
+    
+    def admin_or_correct_user
+      @user = User.find(params[:user_id]) if @user.blank?
+      unless current_user?(@user) || current_user.admin?
+        flash[:danger] = "編集権限がありません。"
+        redirect_to(root_url)
+      end
+    end
+
 end
 

@@ -16,10 +16,11 @@ Rails.application.routes.draw do
       patch 'attendances/update_one_month'
       get 'going_to_work'
       get 'check_show'
-      
     end 
-    collection { post :import }
     
+    collection { post :import } 
+              
+
     resources :attendances do
       member do
         get 'edit_overtime_request'
@@ -34,14 +35,15 @@ Rails.application.routes.draw do
         patch 'update_change_of_attendance2'
         get 'designation_log'
         get 'one_month_request'
+        get 'edit_one_month_request'
         patch 'update_one_month_request'
-        
-        
-        
+        get 'edit_one_month_application'
         get 'csv_output'
       end
-    end  
+    end 
+    patch 'update_one_month_application' 
   end
+  
   
   resources :offices
   

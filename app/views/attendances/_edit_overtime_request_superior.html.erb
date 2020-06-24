@@ -9,7 +9,7 @@
       </button>
     </div>
        <div class="modal-body">
-          <%= form_with(model: @attendance, url: update_overtime_request_superior_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @attendances, url: update_overtime_request_superior_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
                <% @users.each do |user| %> 
               <table class="table table-bordered" id="table-attendances">
@@ -28,7 +28,7 @@
                   </tr
                 </thead>  
                 <tbody>
-                 <% @attendance.each do |att| %>
+                 <% @attendances.each do |att| %>
                    <%= f.fields_for "attendance[]", att do |i| %> 
                      <%= i.hidden_field :id, :value => att.id %> <!-- attendancesテーブルのidを渡す -->
                      <%= i.hidden_field :user_id, :value => user.id %>
@@ -46,10 +46,10 @@
                         <% end %>
                       </td>
                       <td><%= l att.work_end_time, format: :time %></td>
-                      <td><%= format_basic_info(@user.designation_duty_finish_time) %></td>
+                      <td><%= format_basic_info(user.designation_duty_finish_time) %></td>
                       <td>
                           <% if att.work_end_time.present? %>
-                          <%= overtime(att.work_end_time, @user.designation_duty_finish_time, att.worked_on) %>
+                          <%= overtime(att.work_end_time, user.designation_duty_finish_time, att.worked_on, user.id) %>
                           <% end %>
                       </td>
                       <td><%= att.job_description %></td>

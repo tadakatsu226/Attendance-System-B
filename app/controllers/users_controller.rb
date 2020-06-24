@@ -15,7 +15,8 @@ class UsersController < ApplicationController
 
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
-    # @request_count1 = Attendance.where(mon_req_authorizer: @user.id, month_req_status: "申請中").count
+    @instructor = User.where(superior: true).where.not(id: @user.id)
+    @request_count1 = Attendance.where(month_req_authorizer: @user.id, month_req_status: "申請中").count
     @request_count2 = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中").count
     @request_count3 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "申請中").count
   end
@@ -99,17 +100,19 @@ class UsersController < ApplicationController
   end
   
 
-  
-  def admin_or_correct_user
-    @user = User.find(params[:user_id]) if @user.blank?
-    unless current_user?(@user) || current_user.admin?
-      flash[:danger] = "編集権限がありません。"
-      redirect_to(root_url)
+  # 一ヶ月分の勤怠申請
+  def update_one_month_application
+    @user = User.find(params[:user_id])
+    attendance  = @user.attendances.find_by(worked_on: params[:attendance][:apply_month])
+    if attendance.update(one_month_params)
+      flash[:success] = "１ヶ月の勤怠を申請しました。"
+      redirect_to user_url(current_user)
     end  
   end
 
 
   private
+  
 
     def user_params
       params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
@@ -118,5 +121,17 @@ class UsersController < ApplicationController
     def user_info_params
       params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation, :employee_number, :uid,
       :basic_work_time, :work_time, :designated_work_start_time, :designated_work_end_time)
+    end
+    
+    def one_month_params
+      params.require(:attendance).permit(:month_req_status, :apply_month, :month_req_authorizer)
+    end
+    
+    def admin_or_correct_user
+      @user = User.find(params[:user_id]) if @user.blank?
+      unless current_user?(@user) || current_user.admin?
+        flash[:danger] = "編集権限がありません。"
+        redirect_to(root_url)
+      end  
     end
 end

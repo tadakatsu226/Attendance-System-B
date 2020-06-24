@@ -30,7 +30,7 @@
   <ul class="infomation">
     <% if @user.superior == true %>
       <% if @request_count1 != 0 %>
-        <li><%=link_to "【所属長承認申請のお知らせ】", one_month_request_user_attendance_path(@user), remote: true , class: "apprication-info" %>
+        <li><%=link_to "【所属長承認申請のお知らせ】", edit_one_month_request_user_attendance_path(@user), remote: true , class: "apprication-info" %>
         <div class="box1"> <%= @request_count1 %>件の通知があります</div>
       <% else %>
         <p>【所属長承認申請のお知らせ】</p>
@@ -141,17 +141,22 @@
             <% end %>
           </td>
           <td>
-            <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
-              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-            <% end %>
+            <% if day.edit_status == "承認" %>
+              <% if day.begintime_at.present? && day.endtime_at.present? %>
+                <%= worktimes(day.begintime_at.floor_to(15.minutes), day.endtime_at.floor_to(15.minutes), day.worked_on) %>
+              <% end %>
+            <% else %>
+              <% if day.started_at.present? && day.finished_at.present? %>
+                <%= working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
+              <% end %>
+            <% end %> 
           </td>
           <td><%= day.note %></td>
           <td><%= l(day.work_end_time, format: :time_hour) if day.work_end_time.present? %></td>
           <td><%= l(day.work_end_time.floor_to(15.minutes),format: :time_minute) if day.work_end_time.present? %></td>
           <td>
               <% if day.work_end_time.present? %>
-              <%= overtime(day.work_end_time, @user.designation_duty_finish_time, day.worked_on) %>
+              <%= overtime(day.work_end_time, @user.designation_duty_finish_time, day.worked_on, @user.id) %>
               <% end %>
           </td>
           <td><%= day.job_description %></td>
@@ -185,20 +190,23 @@
           <td><%= format("%.2f", @total_working_times.to_f) %></td>
           <td colspan="5"></td>
           <td>
-            所属長承認　未 
-            <%#= select :instructor, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %>
-            <!--<div class="dropdown">-->
-            <!--  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">　　　　-->
-            <!--  <span class="caret"></span>-->
-            <!--  </button>-->
-            <!--    <div class="dropdown-menu">-->
-            <!--      <li class= "dropdown-item"><%#= link_to "上長1", current_user %></li>-->
-            <!--      <li class= "dropdown-item"><%#= link_to "上長2", current_user %></li>-->
-            <!--    </div>-->
-            <!--</div>-->
-            <div class="Approval">
-            <%= link_to "承認", "#", class: "btn btn-block btn-primary" %>
-            </div>
+            <% if @user.attendances.find_by(month_req_status: "承認") %>
+            <p>所属長承認　済</p>
+            <% elsif  @user.attendances.find_by(month_req_status: "申請中") %>
+            <p>所属長へ申請中</p>
+            <% else %>
+            <p>所属長承認　未</p>
+            <% end %>
+              <%= form_with(model: @attendance, url: user_update_one_month_application_path(@user), local: true, method: :patch) do |f| %>
+                <%= f.fields_for :attendance do |i| %>
+                  <%= i.hidden_field :apply_month, :value => @first_day %>
+                  <%= i.hidden_field :month_req_status, :value => "申請中" %>
+                  <%= i.select :month_req_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %>
+                <% end %>
+                <div class="Approval">
+                  <%= f.submit "申請", class: "btn btn-block btn-primary" %>
+                </div>
+              <% end %>
           </td>
         </tr>
     </tfoot>
@@ -209,5 +217,5 @@
 <div id="edit-overtime-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="edit-overtime-request-superior" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="change-of-attendance1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="one-month-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="edit-one-month-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 

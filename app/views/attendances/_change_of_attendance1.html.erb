@@ -9,7 +9,7 @@
       </button>
     </div>
        <div class="modal-body">
-          <%= form_with(model: @attendance, url: update_change_of_attendance1_user_attendance_path(@user), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @user, url: update_change_of_attendance1_user_attendance_path(@user), local: true, method: :patch) do |f| %>
             <%= render 'shared/error_messages', object: @user %>
             <% @users.each do |user| %>
               <table class="table table-bordered" id="table-attendances">
@@ -39,8 +39,8 @@
                   </tr>
                 </thead>  
                 <tbody>
-                  <% @attendance.each do |att_notice| %>
-                    <%= f.fields_for "attendance[]", att_notice do |i| %>
+                  <% @attendances.each do |att_notice| %>
+                    <%= f.fields_for "attendances[]", att_notice do |i| %>
                      <%= i.hidden_field :id, :value => att_notice.id %> <!-- attendancesテーブルのidを渡す -->
                      <%= i.hidden_field :user_id, :value => user.id %>
                       <% if att_notice.user_id == user.id %>

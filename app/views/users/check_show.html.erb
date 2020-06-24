@@ -59,17 +59,46 @@
         <tr>
           <td></td>
           <td><%= l(day.worked_on, format: :short) %></td>   
-          <td><% $days_of_the_week[day.worked_on.wday] %></td>    
-          <td><%= l(day.started_at, format: :time_hour) if day.started_at.present? %></td>
-          <td><%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %></td>
-          <td style="width: 10%" "height: 10%"> </td>
-          <td><% l(day.finished_at, format: :time_hour) if day.finished_at.present? %></td>
-          <td><%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %></td>
+          <td><%= $days_of_the_week[day.worked_on.wday] %></td>    
           <td>
-              <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
-              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.begintime_at, format: :time_hour) if day.begintime_at.present? %>
+            <% else %>
+            <%= l(day.started_at, format: :time_hour) if day.started_at.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.begintime_at.floor_to(15.minutes),format: :time_minute) if day.begintime_at.present? %>
+            <% else %>
+            <%= l(day.started_at.floor_to(15.minutes),format: :time_minute) if day.started_at.present? %>
+            <% end %>
+          </td>
+          <td style="width: 10%" "height: 10%"> </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.endtime_at, format: :time_hour) if day.endtime_at.present? %>
+            <% else %>
+            <%= l(day.finished_at, format: :time_hour) if day.finished_at.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+            <%= l(day.endtime_at.floor_to(15.minutes),format: :time_minute) if day.endtime_at.present? %>
+            <% else %>
+            <%= l(day.finished_at.floor_to(15.minutes),format: :time_minute) if day.finished_at.present? %>
+            <% end %>
+          </td>
+          <td>
+            <% if day.edit_status == "承認" %>
+              <% if day.begintime_at.present? && day.endtime_at.present? %>
+                <%= worktimes(day.begintime_at.floor_to(15.minutes), day.endtime_at.floor_to(15.minutes), day.worked_on) %>
               <% end %>
+            <% else %>
+              <% if day.started_at.present? && day.finished_at.present? %>
+                <%= working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
+              <% end %>
+            <% end %>   
           </td>
           <td><%= day.note %></td>
           <td><%= l(day.work_end_time, format: :time_hour) if day.work_end_time.present? %></td>
