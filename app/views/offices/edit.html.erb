@@ -8,7 +8,6 @@
           <%= form_with(model: @office, url: office_path(@office.id), local: true, method: :patch) do |f| %>
             <%#= render 'shared/error_messages', object: @user %>
 
-
             <%= f.label :拠点番号, class: "label-#{yield(:class_text)}" %>
             <%= f.text_field :office_number, class: "form-control" %>
             
@@ -19,7 +18,9 @@
             
             <div class="work-time">
             <%= f.label :勤怠種類, class: "label-#{yield(:class_text)}" %>
-            <%= f.text_field :attendance_type, class: "form-control" %>
+            </div>
+            <div class="office">
+            <%= f.select :attendance_type, [["出 勤"],["退 勤"]], prompt: "選択してください" %>
             </div>
             
             <div class="center">

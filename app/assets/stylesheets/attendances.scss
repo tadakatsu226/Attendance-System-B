@@ -13,16 +13,16 @@
  display: inline-block;
 }
 
-#year {
+.parent {
  width:100px;
  height:25px;
  display:block;
 }
 
-#month {
+.children {
  width:100px;
  height:25px;
- display:block;
+ display:inline-block;
 }
 
 #button01 {

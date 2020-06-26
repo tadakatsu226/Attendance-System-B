@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     patch 'update_one_month_application' 
   end
   
-  
-  resources :offices
+  resources :offices do
+  end
   
 end

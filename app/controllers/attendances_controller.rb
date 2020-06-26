@@ -20,6 +20,13 @@ class AttendancesController < ApplicationController
     
   end
   
+  def index
+    # 検索オブジェクト
+    @search = Product.ransack(params[:q])
+    # 検索結果
+    @products = @search.result
+  end
+  
   def csv_output
       respond_to do |format|
       format.html do
@@ -153,8 +160,6 @@ class AttendancesController < ApplicationController
   # 一ヶ月分の勤怠申請の承認または否認
   def update_one_month_request
     @user = User.find(params[:user_id])
-    # @users = User.joins(:attendances).group("users.id").where(attendances: {month_req_status: "申請中", month_req_authorizer: @user.id})
-    # @attendances = Attendance.where(month_req_authorizer: @user.id, month_req_status: "申請中")
     one_month_request_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:verify] == "true"
@@ -168,7 +173,7 @@ class AttendancesController < ApplicationController
   
   def designation_log
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(overtime_status: "承認").or(@user.attendances.where(edit_status: "承認"))
+    @attendance = @user.attendances.where(edit_status: "承認").order(worked_on: "ASC")
   
   end
 
