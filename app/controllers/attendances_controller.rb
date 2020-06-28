@@ -34,7 +34,7 @@ class AttendancesController < ApplicationController
       end 
       format.csv do
           #csv用の処理を書く
-          send_data render_to_string, filename: "勤怠.csv", type: :csv
+          send_data render_to_string, filename: "#{@user.name}.csv", type: :csv
       end
     end
   end
@@ -65,7 +65,7 @@ class AttendancesController < ApplicationController
   
   # 勤怠を編集
   def update_one_month
-    ActiveRecord::Base.transaction do
+    # ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         if item[:edit_authorizer].present?
@@ -80,10 +80,10 @@ class AttendancesController < ApplicationController
           end
         end
       end
-    end
-  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    # end
+  # rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+  #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+  #   redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
   # 残業申請モーダル表示
@@ -101,7 +101,7 @@ class AttendancesController < ApplicationController
       flash[:success] = "残業を申請しました。"
       redirect_to user_url(current_user)
     else
-      flash[:danger] = "残業申請に失敗しました。"
+      flash[:danger] = "翌日のチェックボックス以外は入力必須です。"
       redirect_to user_url(current_user)
     end
   end

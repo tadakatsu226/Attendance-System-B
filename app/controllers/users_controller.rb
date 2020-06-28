@@ -1,16 +1,15 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior3, :update_overtime_request_superior3, :check_show]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_overtime_request_superior3, :update_overtime_request_superior3]
-  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :update_basic_info, :check_show, :user]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :admin_user, only: [:index, :destroy]
   before_action :admin_or_correct_user, only: [:edit, :update]
   before_action :set_one_month, only: [:show, :check_show]
   before_action :admin_or_correct_user, only: :show
-  
+  before_action :not_admin_user, only: :show
 
 
   def index
-    @users = User.all
-    # @users = User.where.not(id: 1).all
+    @users = User.where.not(id: 1).all
   end
 
   def show
@@ -49,9 +48,9 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(user_info_params)
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to users_url
     else
-      render :edit
+      redirect_to users_url
     end
   end
 
@@ -61,30 +60,9 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
-  def edit_basic_info
-    
-  end
-
-  def update_basic_info
-    if @user.update_attributes(basic_info_params)
-      flash[:success] = "#{@user.name}の基本情報を更新しました。"
-    else
-      flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
-    end
-    redirect_to users_url
-  end
-  
 
   def going_to_work
-    #   @attnedances = Attendance.find(params[:id]) 
-    # @user = @attendances.user_id
-    # @user = User.find(params[:id])
-    # @attendances = @user.attendances
-    
-    # if @attendances.started_at.present? && @attendances.finished_at.nil? 
-      
-     @users = User.all
-    # end
+     @users = User.joins(:attendances).group("users.id").where.not(attendances: {started_at: nil}).where(attendances: {finished_at: nil}) 
   end
   
 
@@ -109,7 +87,7 @@ class UsersController < ApplicationController
       redirect_to user_url(current_user)
     end  
   end
-
+  
 
   private
   
@@ -120,7 +98,7 @@ class UsersController < ApplicationController
 
     def user_info_params
       params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation, :employee_number, :uid,
-      :basic_work_time, :work_time, :designated_work_start_time, :designated_work_end_time)
+      :basic_time, :designation_duty_start_time, :designation_duty_finish_time)
     end
     
     def one_month_params
@@ -134,4 +112,12 @@ class UsersController < ApplicationController
         redirect_to(root_url)
       end  
     end
+    
+    def not_admin_user
+      if current_user.admin?
+      # flash[:danger] = "管理者には勤怠画面を閲覧できません"
+      redirect_to users_url
+      end
+    end
+
 end

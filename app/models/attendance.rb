@@ -2,7 +2,14 @@ class Attendance < ApplicationRecord
   belongs_to :user
 
   validates :worked_on, presence: true
-
+  validates :work_end_time, presence: true
+  validates :job_description, presence: true 
+  validates :overtime_authorizer, presence: true
+  # validates :begintime_at, presence: true
+  # validates :endtime_at, presence: true
+  # validates :note, presence: true
+  
+  
   # 出勤時間が存在しない場合、退勤時間は無効
   validate :finished_at_is_invalid_without_a_started_at
   # 退勤時間が存在しない場合、出勤時間は無効
