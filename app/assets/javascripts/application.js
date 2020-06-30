@@ -17,3 +17,5 @@
 //= require_tree .
 //= require jquery 
 //= require jquery_ujs 
+//= require jquery.validationEngine-zh_CN
+//= require jquery.validationEngine

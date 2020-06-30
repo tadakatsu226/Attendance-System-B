@@ -21,10 +21,7 @@ class AttendancesController < ApplicationController
   end
   
   def index
-    # 検索オブジェクト
-    @search = Product.ransack(params[:q])
-    # 検索結果
-    @products = @search.result
+  
   end
   
   def csv_output
@@ -65,7 +62,7 @@ class AttendancesController < ApplicationController
   
   # 勤怠を編集
   def update_one_month
-    # ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         if item[:edit_authorizer].present?
@@ -73,17 +70,22 @@ class AttendancesController < ApplicationController
             attendance.edit_status = "申請中"
             attendance.update_attributes!(item)
             flash[:success] = "勤怠の変更を申請しました。"
-             redirect_to user_url(date: params[:date])and return
+            # redirect_to user_url(date: params[:date])and return
+             redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
           else
             flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-            redirect_to attendances_edit_one_month_user_url(date: params[:date])
+            # redirect_to user_url(date: params[:date])and return
+            redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
           end
+        else
+          flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+          redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
         end
       end
-    # end
-  # rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-  #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-  #   redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    end
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
   # 残業申請モーダル表示
@@ -98,11 +100,8 @@ class AttendancesController < ApplicationController
     attendance = Attendance.find(params[:id]) 
     attendance.overtime_status = "申請中"
     if attendance.update(attendance_params)
-      flash[:success] = "残業を申請しました。"
-      redirect_to user_url(current_user)
-    else
-      flash[:danger] = "翌日のチェックボックス以外は入力必須です。"
-      redirect_to user_url(current_user)
+       flash[:success] = "残業を申請しました。"
+       redirect_to user_url(current_user) 
     end
   end
   
@@ -170,11 +169,11 @@ class AttendancesController < ApplicationController
       redirect_to user_url(current_user)
   end
   
-  
+
   def designation_log
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(edit_status: "承認").order(worked_on: "ASC")
-  
+    @search = @user.attendances.where(edit_status: "承認").order(worked_on: "ASC").ransack(params[:q])
+    @attendances = @search.result
   end
 
 

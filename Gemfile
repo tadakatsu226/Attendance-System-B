@@ -19,6 +19,7 @@ gem 'pry-rails'
 gem 'roo'
 gem 'jquery-rails'
 gem 'ransack'
+gem 'jQuery-Validation-Engine-rails'
 
 group :development, :test do
   gem 'sqlite3'

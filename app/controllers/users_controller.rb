@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      log_in @user
+      log_in @user # 保存成功後、ログインします。
       flash[:success] = '新規作成に成功しました。'
       redirect_to @user
     else
@@ -85,6 +85,9 @@ class UsersController < ApplicationController
     if attendance.update(one_month_params)
       flash[:success] = "１ヶ月の勤怠を申請しました。"
       redirect_to user_url(current_user)
+    else
+      flash[:danger] = "所属長を選択してください。"
+      redirect_to user_url(current_user)
     end  
   end
   
@@ -93,7 +96,7 @@ class UsersController < ApplicationController
   
 
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation)
     end
 
     def user_info_params

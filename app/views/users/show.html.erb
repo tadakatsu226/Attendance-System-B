@@ -199,7 +199,7 @@
                 <%= f.fields_for :attendance do |i| %>
                   <%= i.hidden_field :apply_month, :value => @first_day %>
                   <%= i.hidden_field :month_req_status, :value => "申請中" %>
-                  <%= i.select :month_req_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), include_blank: true %>
+                  <%= i.select :month_req_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), {include_blank: true}, :required => true %>
                 <% end %>
                 <div class="Approval">
                   <%= f.submit "申請", class: "btn btn-block btn-primary" %>

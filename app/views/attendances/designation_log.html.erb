@@ -1,92 +1,24 @@
 <h1>勤怠ログ（承認済）</h1>
-  <table class="table table-bordered" id="table-attendances">
-      <thead>
-        <!--<form>-->
-        <input id="button01" type="button" value="リセット">
-        <script>
-          $(function(){
-            $("#button01").click(function() {
-              $("#log").hide();
+  <div class = "container">
+        <form>
+          <input id="button01" type="button" value="リセット">
+          <script>
+            $(function(){
+              $("#button01").click(function() {
+                $("#log").hide();
+              });
             });
-          });
-        </script>
-        <!--< %= search_form_for @search do |f| %>-->
-        <!--  < %= f.date_select , {start_year: 2015, end_year: 2025} %>-->
-        <!--  < %= f.date_select , {start_month: 1, end_month: 12} %>-->
-        <!--  < %= f.submit "検索", :name => nil, class: "btn btn-primary btn-ms" %>-->
-        <!--  < % end %>  -->
-        <script>
-          $(function(){
-            
-            $('select#year').change(function() {
-              var yval = $(this).val();
-            }
-            )
-            
-            
-            
-            // var $children = $('.children'); //月数の要素を変数に入れます。
-            // var original = $children.html(); //後のイベントで、不要なoption要素を削除するため、オリジナルをとっておく
-            //年数のselect要素が変更になるとイベントが発生
-          // <!--  $('.parent').change(function() {-->
-              //選択された月数のvalueを取得し変数に入れる
-          // <!--    var val1 = $(this).val();-->
-            
-              //   削除された要素をもとに戻すため.html(original)を入れておく
-              // $children.html(original).find('option').each(function() {
-              // var val2 = $(this).data('val'); //data-valの値を取得
-              // //valueと異なるdata-valを持つ要素を削除
-              //   if (val1 != val2) {
-              //   $(this).not(':first-child').remove();
-              //   }
-              // });
-            
-              // //年数のselect要素が未選択の場合、月数をdisabledにする
-              //   if ($(this).val() == "") {
-              //   $children.attr('disabled', 'disabled');
-              //   } else {
-              //   $children.removeAttr('disabled');
-              //   // 
-            // });
-
-                // セレクトボックスが切り替わったら発動
-                // $('select').change(function() {
-               
-                  //選択したvalue値を変数に格納
-                  // var val = $(this).val();
-               
-                  //選択したvalue値をp要素に出力
-                  // $('tbody').text(val);
-                // });
-            
-          });
           </script>
-          
-           <select class="parent" name="foo">
-            <option value="selected"="selected">----- 年 -----</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-          </select>
-          
-          <select class="children" name="bar">
-            <option value="selected"="selected">----- 月 -----</option>
-            <option value="1月" >1月</option>
-            <option value="2月" >2月</option>
-            <option value="3月" >3月</option>
-            <option value="4月" >4月</option>
-            <option value="5月" >5月</option>
-            <option value="6月" >6月</option>
-            <option value="7月" >7月</option>
-            <option value="8月" >8月</option>
-            <option value="9月" >9月</option>
-            <option value="10月" >10月</option>
-            <option value="11月" >11月</option>
-            <option value="12月" >12月</option>
-          </select>
-           
-        
-        <!--</form>-->
+          <div class = "date_time">
+            <%= search_form_for @search, url:designation_log_user_attendance_path do |f| %>
+            <%= f.date_select :worked_on_cont, {discard_day: true, prompt: {year: "年", month: "月"}, start_year:Time.now.year, end_year:Time.now.year+10 }, :required => true, class: "form-control" %>
+            <%= f.submit "検索", :name => nil, class: "btn btn-primary btn-block" %>
+            <% end %> 
+            
+          </div>  
+        </form>
+      <table class="table table-bordered" id="table-attendances">
+        <thead>
         <tr>
           <th>日付</th>
           <th>変更前出社時間</th>
@@ -96,11 +28,12 @@
           <th>指示者</th>
           <th>承認日</th>
         </tr>
-      </thead> 
+       </thead>
       <tbody id="log">
-           <% @attendance.each do |desig_log| %>
+          <%# if @search.result.present? %>
+          <% @attendances.each do |desig_log| %>
         <tr>
-          　<td><%= l(desig_log.worked_on, format: :default) %></td>
+          　<td><%= l(desig_log.worked_on, format: :long) %></td>
           　<td><%= l(desig_log.started_at, format: :time) if desig_log.started_at.present? %></td>
           　<td><%= l(desig_log.finished_at, format: :time) if desig_log.finished_at.present? %></td>
           　<td><%= l(desig_log.begintime_at,  format: :time) if desig_log.begintime_at.present? %></td>
@@ -108,6 +41,13 @@
           　<td><%= User.find(desig_log.edit_authorizer).name %></td>
           　<td><%= l(desig_log.updated_at, format: :half) if desig_log.updated_at.present? %></td>
         </tr>
-           <% end %>
+           <%# end %>
+           <%# else %>
+           <!--<h2 class="log">勤怠ログはありません</h2>-->
+          <% end %>
       </tbody>
-  </table>
+    </table>
+    <div class="center">
+      <%= link_to "戻る", user_path(date: @first_day), class: "btn btn-default btn-primary" %> 
+      </div>
+  </div>

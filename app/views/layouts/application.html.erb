@@ -19,5 +19,10 @@
       <%= yield %>
       <%= debug(params) if Rails.env.development? %>
     </div>
+    <script type="text/javascript">
+      jQuery(document).ready(function(){
+      jQuery("#validate_id").validationEngine();
+      });
+    </script>
   </body>
 </html>
