@@ -62,32 +62,32 @@ class AttendancesController < ApplicationController
   
   # 勤怠を編集
   def update_one_month
-    ActiveRecord::Base.transaction do
+    @request_count2 = Attendance.where(user_id: @user, edit_status: "申請中").count
+    # ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         if item[:edit_authorizer].present?
           if item[:begintime_at].present? && item[:endtime_at].present? && item[:note].present? 
             attendance.edit_status = "申請中"
             attendance.update_attributes!(item)
-            flash[:success] = "勤怠の変更を申請しました。"
-            # redirect_to user_url(date: params[:date])and return
-             redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
-          else
-            flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-            # redirect_to user_url(date: params[:date])and return
-            redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
           end
-        else
-          flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-          redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
         end
       end
-    end
-  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+        flash[:success] = "勤怠の変更を#{@request_count2}件申請しました。"
+        redirect_to user_url(date: params[:date])
   end
-  
+          # else
+          #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+          #   # redirect_to user_url(date: params[:date])and return
+          #   redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
+        # else
+        #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+        #   redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
+
+# rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+#     flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+#     redirect_to attendances_edit_one_month_user_url(date: params[:date])
+
   # 残業申請モーダル表示
   def edit_overtime_request
     @user = User.find(params[:user_id])
@@ -138,7 +138,7 @@ class AttendancesController < ApplicationController
   def update_change_of_attendance1
     @user = User.find(params[:user_id])
     # @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
-      change_params.each do |id, item|
+    change_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:confirmed] == "true"
         @attendance.update(item)
