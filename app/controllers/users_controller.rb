@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :update_basic_info, :check_show, :user]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :update_basic_info, :check_show]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :admin_user, only: [:index, :destroy]
   before_action :admin_or_correct_user, only: [:edit, :update]
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   
   
   def check_show
-
+   
   end
   
 
@@ -81,12 +81,10 @@ class UsersController < ApplicationController
   # 一ヶ月分の勤怠申請
   def update_one_month_application
     @user = User.find(params[:user_id])
-    attendance  = @user.attendances.find_by(worked_on: params[:attendance][:apply_month])
+    attendance = @user.attendances.find_by(worked_on: params[:attendance][:apply_month])
+    attendance.month_req_status = "申請中"
     if attendance.update(one_month_params)
       flash[:success] = "１ヶ月の勤怠を申請しました。"
-      redirect_to user_url(current_user)
-    else
-      flash[:danger] = "所属長を選択してください。"
       redirect_to user_url(current_user)
     end  
   end

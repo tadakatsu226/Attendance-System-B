@@ -193,12 +193,13 @@
             <% elsif  @user.attendances.find_by(month_req_status: "申請中") %>
             <p>所属長へ申請中</p>
             <% else %>
+            <%# elsif  @user.attendances.find_by(month_req_status: "否認")%>
             <p>所属長承認　未</p>
             <% end %>
               <%= form_with(model: @attendance, url: user_update_one_month_application_path(@user), local: true, method: :patch) do |f| %>
                 <%= f.fields_for :attendance do |i| %>
                   <%= i.hidden_field :apply_month, :value => @first_day %>
-                  <%= i.hidden_field :month_req_status, :value => "申請中" %>
+                  <%#= i.hidden_field :month_req_status, :value => "申請中" %>
                   <%= i.select :month_req_authorizer, options_from_collection_for_select(@instructor, :id, :name , 1), {include_blank: true}, :required => true %>
                 <% end %>
                 <div class="Approval">

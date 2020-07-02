@@ -55,7 +55,7 @@
                       <td><%= att.job_description %></td>
                       <td><%= i.select :overtime_status, [["なし"],["申請中"],["承認"],["否認"]] %></td>
                       <td><%= i.check_box :remember, {}, "true", "false" %></td>
-                      <td><%= link_to "確認", check_show_user_path(att.user, date: @first_day), :target=>["_blank"], class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", check_show_user_path(att.user_id, date: att.worked_on.beginning_of_month), :target=>["_blank"], class: "btn btn-primary" %></td>
                     </tr>
                    <% end %>  
                   <% end %> 

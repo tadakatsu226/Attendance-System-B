@@ -62,8 +62,7 @@ class AttendancesController < ApplicationController
   
   # 勤怠を編集
   def update_one_month
-    @request_count2 = Attendance.where(user_id: @user, edit_status: "申請中").count
-    # ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         if item[:edit_authorizer].present?
@@ -73,20 +72,15 @@ class AttendancesController < ApplicationController
           end
         end
       end
-        flash[:success] = "勤怠の変更を#{@request_count2}件申請しました。"
+        @request_count4 = Attendance.where(user_id: @user, edit_status: "申請中").count
+        flash[:success] = "勤怠の変更を合計#{@request_count4}件申請しました。"
         redirect_to user_url(date: params[:date])
+    end    
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])    
   end
-          # else
-          #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-          #   # redirect_to user_url(date: params[:date])and return
-          #   redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
-        # else
-        #   flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-        #   redirect_to attendances_edit_one_month_user_url(date: params[:date])and return
-
-# rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-#     flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
-#     redirect_to attendances_edit_one_month_user_url(date: params[:date])
+  
 
   # 残業申請モーダル表示
   def edit_overtime_request
@@ -122,7 +116,9 @@ class AttendancesController < ApplicationController
         @attendance.update(item)
       end
     end
-    flash[:success] = "残業申請の変更をしました"
+    @request_count5 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "承認").count
+    @request_count6 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "否認").count
+    flash[:success] = "残業申請を合計#{@request_count5}件の承認、#{@request_count6}件の否認をしました。"
     redirect_to user_url(current_user)
   end
 
@@ -144,7 +140,9 @@ class AttendancesController < ApplicationController
         @attendance.update(item)
       end
     end
-    flash[:success] = "勤怠編集の変更をしました"
+    @request_count7 = Attendance.where(edit_authorizer: @user.id, edit_status: "承認").count
+    @request_count8 = Attendance.where(edit_authorizer: @user.id, edit_status: "否認").count
+    flash[:success] = "勤怠編集を合計#{@request_count7}件の承認、#{@request_count8}件の否認をしました。"
     redirect_to user_url(current_user)
   end
 
@@ -165,7 +163,9 @@ class AttendancesController < ApplicationController
         @attendance.update(item)
       end
     end
-      flash[:success] = "１ヶ月の申請の変更をしました"
+      @request_count9 = Attendance.where(month_req_authorizer: @user.id, month_req_status: "承認").count
+      @request_count10 = Attendance.where(month_req_authorizer: @user.id, month_req_status: "否認").count
+      flash[:success] = "１ヶ月の申請を合計#{@request_count9}件の承認、#{@request_count10}件の否認をしました。"
       redirect_to user_url(current_user)
   end
   

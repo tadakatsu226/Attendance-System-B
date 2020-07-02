@@ -11,8 +11,8 @@
           </script>
           <div class = "date_time">
             <%= search_form_for @search, url:designation_log_user_attendance_path do |f| %>
-            <%= f.date_select :worked_on_cont, {discard_day: true, prompt: {year: "年", month: "月"}, start_year:Time.now.year, end_year:Time.now.year+10 }, :required => true, class: "form-control" %>
-            <%= f.submit "検索", :name => nil, class: "btn btn-primary btn-block" %>
+            <%= f.date_select :worked_on_eq, {prompt: {year: "年", month: "月"}, discard_day: true, start_year:Time.now.year, end_year:Time.now.year+10}, :required => true, class: "form-control" %>
+            <%= f.submit "検索", class: "btn btn-primary btn-block" %>
             <% end %> 
             
           </div>  
@@ -30,10 +30,10 @@
         </tr>
        </thead>
       <tbody id="log">
-          <%# if @search.result.present? %>
+          <% if @search.result.present? %>
           <% @attendances.each do |desig_log| %>
         <tr>
-          　<td><%= l(desig_log.worked_on, format: :long) %></td>
+          　<td><%= l(desig_log.worked_on, format: :default) %></td>
           　<td><%= l(desig_log.started_at, format: :time) if desig_log.started_at.present? %></td>
           　<td><%= l(desig_log.finished_at, format: :time) if desig_log.finished_at.present? %></td>
           　<td><%= l(desig_log.begintime_at,  format: :time) if desig_log.begintime_at.present? %></td>
@@ -41,9 +41,9 @@
           　<td><%= User.find(desig_log.edit_authorizer).name %></td>
           　<td><%= l(desig_log.updated_at, format: :half) if desig_log.updated_at.present? %></td>
         </tr>
-           <%# end %>
-           <%# else %>
-           <!--<h2 class="log">勤怠ログはありません</h2>-->
+           <% end %>
+           <% else %>
+           <h2 class="log">勤怠ログはありません</h2>
           <% end %>
       </tbody>
     </table>
