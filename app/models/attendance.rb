@@ -27,5 +27,9 @@ class Attendance < ApplicationRecord
       errors.add(:begintime_at, "より早い退勤時間は無効です") if begintime_at > endtime_at
     end
   end
+  
+  def search_work
+    worked_on.strftime("%Y%M")
+  end
 
 end

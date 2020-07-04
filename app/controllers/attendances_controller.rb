@@ -1,10 +1,12 @@
 class AttendancesController < ApplicationController
   
-  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1, :designation_log, :one_month_request]
+  before_action :set_user, only: [:csv_output, :edit_one_month, :update_one_month, :change_of_attendance1, :one_month_request]
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_request, :update_overtime_request]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_request, :update_overtime_request,
+  :edit_overtime_request_superior, :update_overtime_request_superior, :change_of_attendance1, :update_change_of_attendance1, :edit_one_month_request,
+  :update_one_month_request, :designation_log]
   before_action :set_one_month, only: [:csv_output, :edit_one_month, :one_month_request]
-
+  
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
 
@@ -108,6 +110,9 @@ class AttendancesController < ApplicationController
   
   # 残業申請による上長からの承認または否認の返信
   def update_overtime_request_superior
+    @request_count5 = 0
+    @request_count6 = 0
+    @request_count7 = 0
     @user = User.find(params[:user_id])
     @users = User.joins(:attendances).group("users.id").where(attendances: {overtime_status: "申請中", overtime_authorizer: @user.id})
     users_params.each do |id, item|
@@ -115,10 +120,15 @@ class AttendancesController < ApplicationController
       if item[:remember] == "true"
         @attendance.update(item)
       end
+      if item[:overtime_status] == "なし"
+          @request_count5 = @request_count5 + 1
+      elsif item[:overtime_status] == "承認"
+          @request_count6 = @request_count6 + 1
+      elsif item[:overtime_status] == "否認"
+          @request_count7 = @request_count7 + 1
+      end
     end
-    @request_count5 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "承認").count
-    @request_count6 = Attendance.where(overtime_authorizer: @user.id, overtime_status: "否認").count
-    flash[:success] = "残業申請を合計#{@request_count5}件の承認、#{@request_count6}件の否認をしました。"
+    flash[:success] = "残業申請を合計#{@request_count5}件のなし, #{@request_count6}件の承認、#{@request_count7}件の否認をしました。"
     redirect_to user_url(current_user)
   end
 
@@ -127,11 +137,13 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:user_id])
     @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
     @attendances = Attendance.where(edit_authorizer: @user.id, edit_status: "申請中")
-
   end
   
   # 勤怠変更申請による上長からの承認または否認の返信
   def update_change_of_attendance1
+    @request_count8 = 0
+    @request_count9 = 0
+    @request_count10 = 0
     @user = User.find(params[:user_id])
     # @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
     change_params.each do |id, item|
@@ -139,11 +151,17 @@ class AttendancesController < ApplicationController
       if item[:confirmed] == "true"
         @attendance.update(item)
       end
+      if item[:edit_status] == "なし"
+          @request_count8 = @request_count8 + 1
+      elsif item[:edit_status] == "承認"
+          @request_count9 = @request_count9 + 1
+      elsif item[:edit_status] == "否認"
+          @request_count10 = @request_count10 + 1
+      end
     end
-    @request_count7 = Attendance.where(edit_authorizer: @user.id, edit_status: "承認").count
-    @request_count8 = Attendance.where(edit_authorizer: @user.id, edit_status: "否認").count
-    flash[:success] = "勤怠編集を合計#{@request_count7}件の承認、#{@request_count8}件の否認をしました。"
+    flash[:success] = "勤怠編集を合計#{@request_count8}件のなし, #{@request_count9}件の承認、#{@request_count10}件の否認をしました。"
     redirect_to user_url(current_user)
+    
   end
 
   # 一ヶ月分の勤怠申請モーダル
@@ -156,16 +174,24 @@ class AttendancesController < ApplicationController
   
   # 一ヶ月分の勤怠申請の承認または否認
   def update_one_month_request
+    @request_count11 = 0 
+    @request_count12 = 0
+    @request_count13 = 0
     @user = User.find(params[:user_id])
     one_month_request_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:verify] == "true"
         @attendance.update(item)
       end
-    end
-      @request_count9 = Attendance.where(month_req_authorizer: @user.id, month_req_status: "承認").count
-      @request_count10 = Attendance.where(month_req_authorizer: @user.id, month_req_status: "否認").count
-      flash[:success] = "１ヶ月の申請を合計#{@request_count9}件の承認、#{@request_count10}件の否認をしました。"
+      if item[:month_req_status] == "なし"
+          @request_count11 = @request_count11 + 1
+      elsif item[:month_req_status] == "承認"
+          @request_count12 = @request_count12 + 1
+      elsif item[:month_req_status] == "否認"
+          @request_count13 = @request_count13 + 1
+      end
+    end  
+      flash[:success] = "１ヶ月の申請を合計#{@request_count11}件のなし, #{@request_count12}件の承認、#{@request_count13}件の否認をしました。"
       redirect_to user_url(current_user)
   end
   
@@ -202,7 +228,7 @@ class AttendancesController < ApplicationController
     
     def admin_or_correct_user
       @user = User.find(params[:user_id]) if @user.blank?
-      unless current_user?(@user) || current_user.admin?
+      unless current_user?(@user) 
         flash[:danger] = "編集権限がありません。"
         redirect_to(root_url)
       end
