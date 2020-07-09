@@ -28,8 +28,4 @@ class Attendance < ApplicationRecord
     end
   end
   
-  def search_work
-    worked_on.strftime("%Y%M")
-  end
-
 end

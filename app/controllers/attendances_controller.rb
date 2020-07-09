@@ -64,6 +64,7 @@ class AttendancesController < ApplicationController
   
   # 勤怠を編集
   def update_one_month
+    @request_count4 = 0
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
@@ -72,9 +73,11 @@ class AttendancesController < ApplicationController
             attendance.edit_status = "申請中"
             attendance.update_attributes!(item)
           end
+          if attendance.edit_status == "申請中"
+          @request_count4 = @request_count4 + 1
+          end
         end
       end
-        @request_count4 = Attendance.where(user_id: @user, edit_status: "申請中").count
         flash[:success] = "勤怠の変更を合計#{@request_count4}件申請しました。"
         redirect_to user_url(date: params[:date])
     end    
@@ -197,10 +200,18 @@ class AttendancesController < ApplicationController
   
 
   def designation_log
+    if params["search(1i)"] || params["search(2i)"] || params["search(3i)"] == present?
     @user = User.find(params[:user_id])
-    @search = @user.attendances.where(edit_status: "承認").order(worked_on: "ASC").ransack(params[:q])
-    @attendances = @search.result
+    @attendances = @user.attendances.where(edit_status: "承認").where(worked_on: params["search(1i)"]+'-'+params["search(2i)"]+'-'+params["search(3i)"]..params["search(1i)"]+'-'+params["search(2i)"]+'-'+"30")
+    else
+    # elsif params["search(1i)"] && params["search(2i)"] && params["search(3i)"] != present?
+    # @user = User.find(params[:user_id])  
+    @attendances = @user.attendances.where(edit_status: "承認")  
+    end
+    # order(worked_on: "ASC")
+    # 
   end
+  
 
 
   private

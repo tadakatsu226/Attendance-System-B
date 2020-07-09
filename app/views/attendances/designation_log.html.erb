@@ -1,20 +1,12 @@
 <h1>勤怠ログ（承認済）</h1>
   <div class = "container">
         <form>
-          <!--<input id="button01" type="button" value="リセット">-->
-          <!--<script>-->
-          <!--  $(function(){-->
-          <!--    $("#button01").click(function() {-->
-          <!--      $("#log").hide();-->
-          <!--    });-->
-          <!--  });-->
-          <!--</script>-->
           <div class = "date_time">
-            <%= search_form_for @search, url:designation_log_user_attendance_path do |f| %>
-            <%= f.date_select :worked_on, {prompt: {year: "年", month: "月"}, discard_day: true, start_year:Time.now.year, end_year:Time.now.year+10}, :required => true, class: "form-control" %>
+            <%= form_with url: designation_log_user_attendance_path(@user), local: true, method: :get do |f| %>
+            <%= f.date_select :search, {prompt: {year: "年", month: "月"}, discard_day: true, start_year:Time.now.year, end_year:Time.now.year+10}, :required => true, class: "form-control" %>
             <%= f.submit "検索", class: "btn btn-primary btn-block" %>
-            <% end %> 
-          </div>  
+            <% end %>
+          </div>
         </form>
       <table class="table table-bordered" id="table-attendances">
         <thead>
@@ -29,7 +21,6 @@
         </tr>
        </thead>
       <tbody id="log">
-          <%# if @search.result.present? %>
           <% @attendances.each do |desig_log| %>
         <tr>
           　<td><%= l(desig_log.worked_on, format: :default) %></td>
@@ -40,13 +31,20 @@
           　<td><%= User.find(desig_log.edit_authorizer).name %></td>
           　<td><%= l(desig_log.updated_at, format: :half) if desig_log.updated_at.present? %></td>
         </tr>
-           <% end %>
-           <%# else %>
-           <!--<h2 class="log">勤怠ログはありません</h2>-->
-          <%# end %>
+          <% end %>
       </tbody>
     </table>
     <div class="center">
       <%= link_to "戻る", user_path(date: @first_day), class: "btn btn-default btn-primary" %> 
       </div>
   </div>
+  
+  
+     <!--<input id="button01" type="button" value="リセット">-->
+          <!--<script>-->
+          <!--  $(function(){-->
+          <!--    $("#button01").click(function() {-->
+          <!--      $("#log").hide();-->
+          <!--    });-->
+          <!--  });-->
+          <!--</script>-->
