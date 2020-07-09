@@ -1,11 +1,19 @@
 <h1>勤怠ログ（承認済）</h1>
   <div class = "container">
         <form>
+          <input id="button01" type="button" value="リセット">
+          <script>
+            $(function(){
+              $("#button01").click(function() {
+                $("#log").hide();
+              });
+            });
+          </script>
           <div class = "date_time">
             <%= form_with url: designation_log_user_attendance_path(@user), local: true, method: :get do |f| %>
             <%= f.date_select :search, {prompt: {year: "年", month: "月"}, discard_day: true, start_year:Time.now.year, end_year:Time.now.year+10}, :required => true, class: "form-control" %>
             <%= f.submit "検索", class: "btn btn-primary btn-block" %>
-            <% end %>
+            
           </div>
         </form>
       <table class="table table-bordered" id="table-attendances">
@@ -32,6 +40,7 @@
           　<td><%= l(desig_log.updated_at, format: :half) if desig_log.updated_at.present? %></td>
         </tr>
           <% end %>
+          <% end %>
       </tbody>
     </table>
     <div class="center">
@@ -40,11 +49,4 @@
   </div>
   
   
-     <!--<input id="button01" type="button" value="リセット">-->
-          <!--<script>-->
-          <!--  $(function(){-->
-          <!--    $("#button01").click(function() {-->
-          <!--      $("#log").hide();-->
-          <!--    });-->
-          <!--  });-->
-          <!--</script>-->
+     

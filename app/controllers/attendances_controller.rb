@@ -202,14 +202,15 @@ class AttendancesController < ApplicationController
   def designation_log
     if params["search(1i)"] || params["search(2i)"] || params["search(3i)"] == present?
     @user = User.find(params[:user_id])
-    @attendances = @user.attendances.where(edit_status: "承認").where(worked_on: params["search(1i)"]+'-'+params["search(2i)"]+'-'+params["search(3i)"]..params["search(1i)"]+'-'+params["search(2i)"]+'-'+"30")
+    @attendances = @user.attendances.where(edit_status: "承認").where(worked_on: params["search(1i)"]+'-'+params["search(2i)"]+'-'+params["search(3i)"]..params["search(1i)"]+'-'+params["search(2i)"]+'-'+"30").order(worked_on: "ASC")
+   
+    # if  == blank?
+    # flash[:danger] = "勤怠ログはありません"
+    # end
     else
-    # elsif params["search(1i)"] && params["search(2i)"] && params["search(3i)"] != present?
-    # @user = User.find(params[:user_id])  
     @attendances = @user.attendances.where(edit_status: "承認")  
+
     end
-    # order(worked_on: "ASC")
-    # 
   end
   
 
