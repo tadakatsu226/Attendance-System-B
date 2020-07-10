@@ -1,40 +1,11 @@
 <% provide(:title, 'All Users') %>
-<!--<%# if params[:search] %>-->
-<!-- <h1>検索結果</h1>-->
-<!--<%# else %>-->
  <h1>ユーザー一覧</h1>
-<%# end %>
-
-<!--<div class="container">-->
-<!--    <%#= form_with(model: @user,url:users_path, local: true, method: 'get') do |f| %>-->
-<!--          <div class="col-md-3 col-md-offset-7">-->
-<!--            <%#= f.label :search, "ユーザー名検索", class: "label-search" %>  -->
-<!--          </div>-->
-<!--      <div class="form-group"> -->
-<!--          <div class="col-md-3 col-md-offset-7">  -->
-<!--              <%#= f.search_field :search, placeholder: "キーワードを入力...", class: 'form-control' %>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--          <div class="col-md-2">  -->
-<!--            <%#= f.submit "検索", :name => nil, class: "btn btn-primary btn-ms" %>-->
-<!--          </div>    -->
-<!--      </div>-->
-<!--    <%# end %>-->
-<!--</div> -->
-
 
 <%= form_tag import_users_path, multipart: true do %>
   <%= file_field_tag :file %>
   <%= submit_tag "　　CSVインポート　　", class: "btn btn-primary" %>
 <% end %>
 
-
-
-
-
-<!--<div class="col-md-10 col-md-offset-1">-->
-  <%#= will_paginate %>
   <table class="table" id="table-users">
    <tbody>
     <% @users.each do |user| %>
@@ -45,11 +16,9 @@
           <%# else %>
             <%= user.name %><br>|
           <%# end %>
-
           <%# if current_user.admin? && !current_user?(user) %>
             <%= link_to "削除", user, class: "btn btn-md btn-primary", method: :delete,
                 data: { confirm: "削除してよろしいですか？" } %>
-          
         </td>
       </tr>
       <tr>
@@ -59,34 +28,10 @@
           <div class="collapse" id="collapseExample<%= user.id %>">
              <div class="card card-body">
                 <%= render partial: 'user', locals: {user: user} %>
-                
-                
-                
              </div>
           </div> 
         </td>
       </tr>
-        
-      
     <% end %>
     </tbody>
-    
-    
   </table>
-  <%#= will_paginate %>
-<!--</div>-->
-
-
-
- <%#= link_to "編���", "#collapseExample" , class: "btn btn-lg btn-primary" %> 
-
-<!--<p>-->
-<!--  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
-<!--    リンク式-->
-<!--  </a>-->
-<!--</p>-->
-<!--<div class="collapse" id="collapseExample">-->
-<!--  <div class="card card-body">-->
-<!--    コンテンツが表示されます。-->
-<!--  </div>-->
-<!--</div>-->
