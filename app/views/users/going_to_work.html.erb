@@ -2,15 +2,15 @@
 <table class="table table-striped table-bordered" >
    <thead>
      <tr>
-       <th>社員番号</th>   
-       <th>名前</th>  
+       <th style="width: 30%">社員番号</th>   
+       <th style="width: 35%">名前</th>  
      </tr>
    </thead> 
    <tbody>
        <tr>
          <% @users.each do |user| %>
-         <td><%= user.employee_number %></td>
-         <td><%= user.name %></td>
+         <td class="center"><%= user.employee_number %></td>
+         <td class="center"><%= user.name %></td>
        </tr>  
        <% end %>
    </tbody> 

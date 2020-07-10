@@ -11,7 +11,7 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 100 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
-  validates :department, length: { in: 2..50 }, allow_blank: true
+  validates :affiliation, length: { in: 2..50 }, allow_blank: true
   validates :basic_time, presence: true
   validates :work_time, presence: true
   validates :designation_duty_start_time, presence: true
@@ -19,7 +19,6 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   
-  # validates :month_req_authorizer, presence: true
 
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)
