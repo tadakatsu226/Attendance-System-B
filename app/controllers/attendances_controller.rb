@@ -121,14 +121,14 @@ class AttendancesController < ApplicationController
     users_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:remember] == "true"
-        @attendance.update(item)
-      end
-      if item[:overtime_status] == "なし"
-          @request_count5 = @request_count5 + 1
-      elsif item[:overtime_status] == "承認"
-          @request_count6 = @request_count6 + 1
-      elsif item[:overtime_status] == "否認"
-          @request_count7 = @request_count7 + 1
+        if item[:overtime_status] == "なし"
+            @request_count5 = @request_count5 + 1
+        elsif item[:overtime_status] == "承認"
+            @request_count6 = @request_count6 + 1
+        elsif item[:overtime_status] == "否認"
+            @request_count7 = @request_count7 + 1
+        end
+      @attendance.update(item)
       end
     end
     flash[:success] = "残業申請を合計#{@request_count5}件のなし, #{@request_count6}件の承認、#{@request_count7}件の否認をしました。"
@@ -148,23 +148,21 @@ class AttendancesController < ApplicationController
     @request_count9 = 0
     @request_count10 = 0
     @user = User.find(params[:user_id])
-    # @users = User.joins(:attendances).group("users.id").where(attendances: {edit_status: "申請中", edit_authorizer: @user.id})
     change_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:confirmed] == "true"
-        @attendance.update(item)
-      end
-      if item[:edit_status] == "なし"
-          @request_count8 = @request_count8 + 1
-      elsif item[:edit_status] == "承認"
-          @request_count9 = @request_count9 + 1
-      elsif item[:edit_status] == "否認"
-          @request_count10 = @request_count10 + 1
+        if item[:edit_status] == "なし"
+            @request_count8 = @request_count8 + 1
+        elsif item[:edit_status] == "承認"
+            @request_count9 = @request_count9 + 1
+        elsif item[:edit_status] == "否認"
+            @request_count10 = @request_count10 + 1
+        end
+      @attendance.update(item)  
       end
     end
     flash[:success] = "勤怠編集を合計#{@request_count8}件のなし, #{@request_count9}件の承認、#{@request_count10}件の否認をしました。"
     redirect_to user_url(current_user)
-    
   end
 
   # 一ヶ月分の勤怠申請モーダル
@@ -184,18 +182,18 @@ class AttendancesController < ApplicationController
     one_month_request_params.each do |id, item|
       @attendance = Attendance.find(id)
       if item[:verify] == "true"
-        @attendance.update(item)
-      end
-      if item[:month_req_status] == "なし"
-          @request_count11 = @request_count11 + 1
-      elsif item[:month_req_status] == "承認"
-          @request_count12 = @request_count12 + 1
-      elsif item[:month_req_status] == "否認"
-          @request_count13 = @request_count13 + 1
+        if item[:month_req_status] == "なし"
+            @request_count11 = @request_count11 + 1
+        elsif item[:month_req_status] == "承認"
+            @request_count12 = @request_count12 + 1
+        elsif item[:month_req_status] == "否認"
+            @request_count13 = @request_count13 + 1
+        end
+      @attendance.update(item)
       end
     end  
-      flash[:success] = "１ヶ月の申請を合計#{@request_count11}件のなし, #{@request_count12}件の承認、#{@request_count13}件の否認をしました。"
-      redirect_to user_url(current_user)
+    flash[:success] = "１ヶ月の申請を合計#{@request_count11}件のなし, #{@request_count12}件の承認、#{@request_count13}件の否認をしました。"
+    redirect_to user_url(current_user)
   end
   
 
