@@ -82,7 +82,7 @@ class AttendancesController < ApplicationController
         redirect_to user_url(date: params[:date])
     end    
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、申請を全てキャンセルしました。"
+    flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])    
   end
   
