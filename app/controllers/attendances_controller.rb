@@ -131,7 +131,7 @@ class AttendancesController < ApplicationController
       @attendance.update(item)
       end
     end
-    flash[:success] = "残業申請を合計#{@request_count5}件のなし, #{@request_count6}件の承認、#{@request_count7}件の否認をしました。"
+    flash[:success] = "残業申請の#{@request_count5}件なし, #{@request_count6}件承認、#{@request_count7}件否認をしました。"
     redirect_to user_url(current_user)
   end
 
@@ -161,7 +161,7 @@ class AttendancesController < ApplicationController
       @attendance.update(item)  
       end
     end
-    flash[:success] = "勤怠編集を合計#{@request_count8}件のなし, #{@request_count9}件の承認、#{@request_count10}件の否認をしました。"
+    flash[:success] = "勤怠変更申請の#{@request_count8}件なし, #{@request_count9}件承認、#{@request_count10}件否認をしました。"
     redirect_to user_url(current_user)
   end
 
@@ -192,7 +192,7 @@ class AttendancesController < ApplicationController
       @attendance.update(item)
       end
     end  
-    flash[:success] = "１ヶ月の申請を合計#{@request_count11}件のなし, #{@request_count12}件の承認、#{@request_count13}件の否認をしました。"
+    flash[:success] = "１ヶ月の申請を合計#{@request_count11}件なし, #{@request_count12}件承認、#{@request_count13}件否認をしました。"
     redirect_to user_url(current_user)
   end
   

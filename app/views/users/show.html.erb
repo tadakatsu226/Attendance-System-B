@@ -189,9 +189,11 @@
           <td colspan="5"></td>
           <td>
             <% if @user.attendances.find_by(month_req_status: "承認", worked_on: @first_day)%>
-            <p><%#= User.find(month_req_authorizer).name %>から承認済</p>
+            <p><%= User.find(@attendances[0]["month_req_authorizer"]).name %>より承認済</p>
             <% elsif  @user.attendances.find_by(month_req_status: "申請中", worked_on: @first_day) %>
-            <p>所属長へ申請中</p>
+            <p><%= User.find(@attendances[0]["month_req_authorizer"]).name %>へ申請中</p>
+            <% elsif  @user.attendances.find_by(month_req_status: "否認", worked_on: @first_day) %>
+            <p><%= User.find(@attendances[0]["month_req_authorizer"]).name %>より否認</p>
             <% else %>
             <p>所属長承認　未</p>
             <% end %>
